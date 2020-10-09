@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/principal"
+            android:icon="@drawable/direc"
+            android:title="Directorio comercial" />
+        <item
+            android:id="@+id/insNegocio"
+            android:icon="@drawable/inscr"
+            android:title="Inscribir mi negocio" />
+        <item
+            android:id="@+id/misNegocios"
+            android:icon="@drawable/negocio"
+            android:title="Mis negocios" />
+        <item
+            android:id="@+id/registrarme"
+            android:icon="@drawable/calendario"
+            android:title="Registrarme a un evento" />
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/cerrar"
+            android:title="Cerrar sesión" />
+    </group>
+
+    <item android:title="Comunicación">
+        <menu>
+            <item
+                android:id="@+id/contactanos2"
+                android:icon="@drawable/contac"
+                android:title="Contáctanos" />
+            <item
+                android:id="@+id/ayudenos"
+                android:icon="@drawable/mejora"
+                android:title="Ayúdanos a mejorar" />
+
+            <item
+                android:id="@+id/ayuda"
+                android:icon="@drawable/ayuda"
+                android:title="Ayuda" />
+        </menu>
+    </item>
+
+</menu>

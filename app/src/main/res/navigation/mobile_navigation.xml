@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/principal">
+
+    <fragment
+        android:id="@+id/ayuda"
+        android:name="com.example.directoriocomercial.Ayuda"
+        android:label="fragment_ayuda"
+        tools:layout="@layout/fragment_ayuda" />
+    <fragment
+        android:id="@+id/principal"
+        android:name="com.example.directoriocomercial.Principal"
+        android:label="fragment_principal"
+        tools:layout="@layout/fragment_principal" />
+    <fragment
+        android:id="@+id/insNegocio"
+        android:name="com.example.directoriocomercial.insNegocio"
+        android:label="fragment_ins_negocio"
+        tools:layout="@layout/fragment_ins_negocio" />
+    <fragment
+        android:id="@+id/registrarme"
+        android:name="com.example.directoriocomercial.Registrarme"
+        android:label="fragment_registrarme"
+        tools:layout="@layout/fragment_registrarme" />
+    <fragment
+        android:id="@+id/contactanos2"
+        android:name="com.example.directoriocomercial.Contactanos"
+        android:label="fragment_contactanos"
+        tools:layout="@layout/fragment_contactanos" />
+    <fragment
+        android:id="@+id/ayudenos"
+        android:name="com.example.directoriocomercial.Ayudenos"
+        android:label="fragment_ayudenos"
+        tools:layout="@layout/fragment_ayudenos" />
+    <fragment
+        android:id="@+id/misNegocios"
+        android:name="com.example.directoriocomercial.MisNegocios"
+        android:label="fragment_mis_negocios"
+        tools:layout="@layout/fragment_mis_negocios" />
+</navigation>

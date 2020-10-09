@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">DirectorioComercial</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_principal">Compra aquí</string>
+    <string name="menu_inscribir">Inscribir mi negocio</string>
+    <string name="menu_negocios">Mis negocios</string>
+    <string name="menu_registrarme">Registrarme a un evento</string>
+    <string name="menu_contact">Contactanos</string>
+    <string name="menu_ayudanos">Ayudanos a mejorar</string>
+    <string name="menu_help">Ayuda</string>
+    <string name="menu_suscribirme">Suscribirme al directorio</string>
+    <string name="menu_actualizacion">Actualización</string>
+    <string name="btn_actualiza">Actualizar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

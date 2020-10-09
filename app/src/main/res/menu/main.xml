@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_directorio"
+        android:orderInCategory="100"
+        android:title="Directorio Comercial"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_suscribirme"
+        android:orderInCategory="100"
+        android:title="Suscribirme al directorio"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_contactar"
+        android:orderInCategory="100"
+        android:title="Contactanos"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_ayudanos"
+        android:orderInCategory="100"
+        android:title="Ayudanos a mejorar"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_ayuda"
+        android:orderInCategory="100"
+        android:title="Ayuda"
+        app:showAsAction="never" />
+</menu>
