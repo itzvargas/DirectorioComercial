@@ -62,7 +62,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_invitado:
                 intent = new Intent(Login.this, Inicio_invitado.class);
                 startActivity(intent);
-                finish();
                 break;
             case R.id.txt_recuperar:
                 break;

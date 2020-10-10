@@ -2,6 +2,7 @@ package com.example.directoriocomercial;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         String nom,fec,em,telef,fac;
         nom = nombre.getText().toString();
         fec = fecha.getText().toString();
@@ -43,7 +45,20 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
 
         if(v.getId() == R.id.btn_suscribirme){
             if(!nom.isEmpty() && !fec.isEmpty() && !em.isEmpty() && !telef.isEmpty()){
+                //Enviar los datos a la BD y notificar al usuario que le llegarán los datos de su sesión por correo
 
+                Toast.makeText(this, "Los datos de tu sesión serán enviados a tu correo. ¡Gracias!",Toast.LENGTH_LONG).show();
+                //Redireccion
+                if(ruta.equals("login")){
+                    intent = new Intent(Suscribirme.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    intent = new Intent(Suscribirme.this, Inicio_invitado.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
             else {
                 Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
