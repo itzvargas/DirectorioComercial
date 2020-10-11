@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edt_nom"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/edt_correo"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -76,10 +76,10 @@
         app:autoSizeStepGranularity="2sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_nom" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/edt_comentario"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="10dp"
@@ -98,10 +98,10 @@
         app:autoSizeStepGranularity="2sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_correo" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/btn_enviar_comentario"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -117,6 +117,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText5" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_comentario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
