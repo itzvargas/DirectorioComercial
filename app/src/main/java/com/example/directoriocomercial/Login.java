@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,12 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import bd.AyudanteBD;
+
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
     EditText usuario,contra;
     Button login,invitado;
     TextView recuperar,suscribirte;
     String user,pass;
+    AyudanteBD aBD;
+    SQLiteDatabase db=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         invitado.setOnClickListener(this);
         recuperar.setOnClickListener(this);
         suscribirte.setOnClickListener(this);
+
+        try{
+            aBD=new AyudanteBD(this,"Directorio",null,1);
+        }//try
+        catch (Exception e) {}
     }
 
     @Override
     public void onClick(View v) {
+        String act = "activo";
+        int id = 1;
         user = usuario.getText().toString();
         pass = contra.getText().toString();
         Intent intent;
@@ -50,10 +62,29 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if(!user.isEmpty() && !pass.isEmpty()) {
                     bolsa.putString("USER",user);
                     bolsa.putString("PASS",pass);
-                    intent = new Intent(Login.this, MainActivity.class);
-                    intent.putExtras(bolsa);
-                    startActivity(intent);
-                    finish();
+                    boolean verif = verificacion();
+                    if(verif == true) {
+                        try {
+                            aBD = new AyudanteBD(this, "Directorio", null, 1);
+                            db = aBD.getWritableDatabase();
+                            if (db != null) {
+                                db.execSQL("INSERT INTO usuarios values (" + id + ",'" + act + "')");
+                                db.close();
+                                Toast.makeText(this, "Bienvenido", Toast.LENGTH_LONG).show();
+                            } else
+                                Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
+                        }//try
+                        catch (Exception e) {
+                            Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
+                        }
+                        intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtras(bolsa);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else {
+                        Toast.makeText(this, "Correo o contraseña incorrectos.", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
@@ -71,6 +102,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 intent.putExtras(bolsa);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    public boolean verificacion(){
+        if(user.equals("itzel@gmail.com") && pass.equals("12345")){
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
