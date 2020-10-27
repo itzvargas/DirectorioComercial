@@ -47,7 +47,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             if(!nom.isEmpty() && !passw.isEmpty() && !em.isEmpty()){
                 //Enviar los datos a la BD y notificar al usuario que le llegarán los datos de su sesión por correo
 
-                Toast.makeText(this, "Los datos de tu sesión serán enviados a tu correo. ¡Gracias!",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Ahora puedes iniciar sesión y disfrutar de los beneficios.",Toast.LENGTH_LONG).show();
                 //Redireccion
                 if(ruta.equals("login")){
                     intent = new Intent(Suscribirme.this, Login.class);
