@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class Suscribirme extends AppCompatActivity implements View.OnClickListener {
 
-    EditText nombre,fecha,email,telefono,face;
+    EditText nombre,pass,email,telefono,face;
     Button suscr;
     String ruta;
     @Override
@@ -24,7 +24,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         ruta = bolsaR.getString("RUTA");
 
         nombre = (EditText)findViewById(R.id.edt_nombreU);
-        fecha = (EditText)findViewById(R.id.edt_fechaNU);
+        pass = (EditText)findViewById(R.id.edt_contraseñaU);
         email = (EditText)findViewById(R.id.edt_emailU);
         telefono = (EditText)findViewById(R.id.edt_telefonoU);
         face = (EditText)findViewById(R.id.edt_faceU);
@@ -36,15 +36,15 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Intent intent;
-        String nom,fec,em,telef,fac;
+        String nom,passw,em,telef,fac;
         nom = nombre.getText().toString();
-        fec = fecha.getText().toString();
+        passw = pass.getText().toString();
         em = email.getText().toString();
         telef = telefono.getText().toString();
         fac = face.getText().toString();
 
         if(v.getId() == R.id.btn_suscribirme){
-            if(!nom.isEmpty() && !fec.isEmpty() && !em.isEmpty() && !telef.isEmpty()){
+            if(!nom.isEmpty() && !passw.isEmpty() && !em.isEmpty()){
                 //Enviar los datos a la BD y notificar al usuario que le llegarán los datos de su sesión por correo
 
                 Toast.makeText(this, "Los datos de tu sesión serán enviados a tu correo. ¡Gracias!",Toast.LENGTH_LONG).show();

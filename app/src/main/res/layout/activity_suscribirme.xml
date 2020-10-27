@@ -38,28 +38,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView14" />
 
     <EditText
-        android:id="@+id/edt_fechaNU"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/input"
-        android:ems="10"
-        android:fontFamily="@font/merriweather"
-        android:hint="Fecha de nacimiento (dd/mm/aaaa)"
-        android:inputType="date"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeStepGranularity="2sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_nombreU" />
-
-    <EditText
         android:id="@+id/edt_emailU"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -73,13 +51,35 @@
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_fechaNU" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_nombreU" />
+
+    <EditText
+        android:id="@+id/edt_contraseñaU"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/input"
+        android:ems="10"
+        android:fontFamily="@font/merriweather"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_emailU" />
 
     <EditText
         android:id="@+id/edt_telefonoU"
@@ -95,13 +95,14 @@
         android:inputType="phone"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_emailU" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_contraseñaU" />
 
     <EditText
         android:id="@+id/edt_faceU"
