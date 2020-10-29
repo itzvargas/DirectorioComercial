@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Direccion extends SQLiteOpenHelper {
 
     //Sentencia para crear la tabla de Usuarios
-    String creacionDireccNeg="CREATE TABLE direccion (id INTEGER primary key,nombre TEXT, precio DOUBLE)";
+    String creacionDireccNeg="CREATE TABLE direccion (id BIGINTEGER(20) primary key,negocio_id BIGINTEGER(20),calle TEXT," +
+            "no_ext INTEGER, no_int INTEGER, colonia TEXT, cp TEXT, municipio TEXT, estado TEXT, url_mapa TEXT)";
 
     public Direccion(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Contacto extends SQLiteOpenHelper {
 
     //Sentencia para crear la tabla de Usuarios
-    String creacionContatNeg="CREATE TABLE contactoNegocio (id INTEGER primary key,nombre TEXT, precio DOUBLE)";
+    String creacionContatNeg="CREATE TABLE contactoNegocio (id BIGINTEGER(20) primary key, negocio_id BIGINTEGER(20), email TEXT, " +
+            "telefono TEXT, web TEXT, horario TEXT, face TEXT, insta TEXT)";
 
     public Contacto(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

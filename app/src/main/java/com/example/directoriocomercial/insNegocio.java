@@ -26,12 +26,12 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     //int id_propietario[] = {R.id.edt_nombreUsuario,R.id.edt_telefonoUsuario,R.id.edt_emailUsuario,R.id.edt_fechaNacUsuario,R.id.edt_faceUsuario};
     int id_negocio[] = {R.id.edt_denominacion,R.id.edt_giro,R.id.edt_descripcion,R.id.edt_productos};
     int id_domicilio[] = {R.id.edt_calle,R.id.edt_noInt,R.id.edt_noExt,R.id.edt_colonia,R.id.edt_codigoPos,R.id.edt_municipio,R.id.edt_estado};
-    int id_contacto[] = {R.id.edt_emailNeg,R.id.edt_telefonoNeg,R.id.edt_horaA,R.id.edt_horaC,R.id.edt_dias};
+    int id_contacto[] = {R.id.edt_emailNeg,R.id.edt_telefonoNeg,R.id.edt_horario};
     EditText pagina,faceN,instaN;
     //EditText propietario[] = new EditText[5];
     EditText negocio[] = new EditText[4];
     EditText domicilio[] = new EditText[7];
-    EditText contacto[] = new EditText[5];
+    EditText contacto[] = new EditText[3];
     Button inscr;
 
     //URL para google maps del negocio
@@ -53,7 +53,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             negocio[i] = (EditText) rootView.findViewById(id_negocio[i]);
         for (int i = 0; i<7; i++)
             domicilio[i] = (EditText) rootView.findViewById(id_domicilio[i]);
-        for (int i = 0; i<5; i++)
+        for (int i = 0; i<3; i++)
             contacto[i] = (EditText) rootView.findViewById(id_contacto[i]);
         sociales = (CheckBox)rootView.findViewById(R.id.chk_redes);
         pagina = (EditText)rootView.findViewById(R.id.edt_paginaW);
@@ -74,7 +74,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         //Domicilio
         String calle,noI,noE,colonia,codigo,munic,estado;
         //Contacto
-        String emailN,telefonoN,horaA,horaC,dias,page,faceNe,instaNe;
+        String emailN,telefonoN,horario,page,faceNe,instaNe;
 
         if(v.getId()==R.id.chk_redes){
             if(sociales.isChecked()) {
@@ -110,9 +110,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
 
             emailN = contacto[0].getText().toString();
             telefonoN = contacto[1].getText().toString();
-            horaA = contacto[2].getText().toString();
-            horaC = contacto[3].getText().toString();
-            dias = contacto[4].getText().toString();
+            horario = contacto[2].getText().toString();
 
             page = pagina.getText().toString();
             faceNe = faceN.getText().toString();

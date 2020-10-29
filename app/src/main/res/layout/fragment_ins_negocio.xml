@@ -386,64 +386,26 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_emailNeg" />
 
     <EditText
-        android:id="@+id/edt_horaA"
-        android:layout_width="170dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/input"
-        android:ems="10"
-        android:fontFamily="@font/merriweather"
-        android:hint="Hora abierto"
-        android:inputType="time"
-        android:textAlignment="center"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_telefonoNeg" />
-
-    <EditText
-        android:id="@+id/edt_horaC"
-        android:layout_width="170dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/input"
-        android:ems="10"
-        android:fontFamily="@font/merriweather"
-        android:hint="Hora cerrado"
-        android:inputType="time"
-        android:textAlignment="center"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_telefonoNeg" />
-
-    <EditText
-        android:id="@+id/edt_dias"
+        android:id="@+id/edt_horario"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="80dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/input"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/input2"
         android:ems="10"
         android:fontFamily="@font/merriweather"
-        android:hint="Días abiertos"
-        android:inputType="textPersonName"
+        android:gravity="start|top"
+        android:hint="Horario de atención"
+        android:inputType="textMultiLine"
         android:textAlignment="center"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_horaC" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_telefonoNeg" />
 
     <CheckBox
         android:id="@+id/chk_redes"
@@ -453,14 +415,14 @@
         android:fontFamily="@font/lato"
         android:text="Página web y/o Redes sociales"
         android:textAlignment="center"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_dias" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_horario" />
 
     <EditText
         android:id="@+id/edt_paginaW"
