@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Negocio extends SQLiteOpenHelper {
 
     //Sentencia para crear la tabla de Negocio
-    String creacionNegocios="CREATE TABLE negocios (id BIGINTEGER(20) primary key,denominacion TEXT, image TEXT, giro TEXT, descripcion TEXT," +
+    String creacionNegocios="CREATE TABLE negocios (id BIGINTEGER(20) primary key,denominacion TEXT, giro TEXT, descripcion TEXT," +
             "principales_Prod TEXT, autorizado INTEGER)";
 
     public Negocio(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
