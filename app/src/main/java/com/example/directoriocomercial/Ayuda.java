@@ -20,12 +20,14 @@ public class Ayuda extends Fragment {
         // Required empty public constructor
     }
 
-
+    View rootview;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ayuda, container, false);
+        rootview = inflater.inflate(R.layout.fragment_ayuda, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.menu_help));
+        return rootview;
     }
 
 }

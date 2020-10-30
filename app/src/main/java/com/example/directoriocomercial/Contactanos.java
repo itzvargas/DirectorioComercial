@@ -34,7 +34,7 @@ public class Contactanos extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_contactanos, container, false);
-
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.menu_contact));
         telefono = (TextView)rootview.findViewById(R.id.txt_telefono);
         whats = (TextView)rootview.findViewById(R.id.txt_whats);
         page = (TextView)rootview.findViewById(R.id.txt_pagina);

@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/principal"
         android:name="com.example.directoriocomercial.Principal"
-        android:label="fragment_principal"
+        android:label="@string/menu_principal"
         tools:layout="@layout/fragment_principal" />
     <fragment
         android:id="@+id/insNegocio"
