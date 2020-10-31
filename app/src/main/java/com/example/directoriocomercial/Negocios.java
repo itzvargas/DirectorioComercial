@@ -44,10 +44,9 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     String palabra;
     String url = "http://elsitioKOCE.com/base";
     int[] ids;
-    String[] fhoto;
     String[] nom;
     String[] gir;
-    int[] autorizado;
+    //int[] autorizado;
     private ArrayList<Menu> menu;
     private ListView lvMenu;
     private MenuAdapter adapter;
@@ -152,19 +151,22 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             super.onPostExecute(s);
             try{
                 JSONArray arreglo = new JSONArray(s);
-                fhoto = new String[arreglo.length()];
+                ids = new int[arreglo.length()];
                 nom = new String[arreglo.length()];
                 gir = new String[arreglo.length()];
-                autorizado = new int[arreglo.length()];
+                //autorizado = new int[arreglo.length()];
+                int j = 0;
+                int au;
                 for (int i = 0; i<arreglo.length(); i++){
                     JSONObject renglon = arreglo.getJSONObject(i);
-                    ids[i] = renglon.getInt("id");
-                    nom[i] = renglon.getString("denominacion_soc");
-                    fhoto[i] = renglon.getString("image");
-                    gir[i] = renglon.getString("giro");
-                    autorizado[i] = renglon.getInt("autorizado");
-                    if(autorizado[i] == 1)
-                        menu.add(new Menu(R.drawable.tienda,nom[i]+"",gir[i]));
+                    au = renglon.getInt("autorizado");
+                    if(au == 1) {
+                        ids[j] = renglon.getInt("id");
+                        nom[j] = renglon.getString("denominacion_soc");
+                        gir[j] = renglon.getString("giro");
+                        menu.add(new Menu(R.drawable.tienda, nom[j] + "", gir[j]));
+                        j++;
+                    }
                 }
                 adapter = new MenuAdapter(Negocios.this, menu);
                 lvMenu.setAdapter(adapter);
