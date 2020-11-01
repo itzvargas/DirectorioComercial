@@ -18,17 +18,18 @@ import java.net.URL;
 
 public class Negocio extends SQLiteOpenHelper {
 
-    String denominacion, giro, descripcion,principales_Prod, mensaje = "";
+    String denominacion, giro, descripcion,principales_Prod, mensaje = "",slug;
     int id,autorizado;
     String url = "http://elsitioKOCE.com/base";
     int[] ids;
     String[] denom;
+    String[] sl;
     String[] gir;
     String[] desc;
     String[] pp;
 
     //Sentencia para crear la tabla de Negocio
-    String creacionNegocios="CREATE TABLE negocios (id BIGINTEGER(20) primary key,denominacion_soc TEXT, giro TEXT, descripcion TEXT," +
+    String creacionNegocios="CREATE TABLE negocios (id BIGINTEGER(20) primary key,denominacion_soc TEXT, slug TEXT, giro TEXT, descripcion TEXT," +
             "principales_prod TEXT)";
 
     public Negocio(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -53,7 +54,7 @@ public class Negocio extends SQLiteOpenHelper {
         try {
             if (db != null) {
                 for(int i = 0;i<ids.length;i++){
-                    db.execSQL("INSERT INTO negocios values (" + ids[i] + ",'" + denom[i] + "','" + gir[i] + "'," +
+                    db.execSQL("INSERT INTO negocios values (" + ids[i] + ",'" + denom[i] + "','" + sl[i] + "','" + gir[i] + "'," +
                             "'" + desc[i] +"','" + pp[i] + "')");
                 }
                 db.close();
@@ -79,6 +80,7 @@ public class Negocio extends SQLiteOpenHelper {
                 JSONArray arreglo = new JSONArray(s);
                 ids = new int[arreglo.length()];
                 denom = new String[arreglo.length()];
+                sl = new String[arreglo.length()];
                 gir = new String[arreglo.length()];
                 desc = new String[arreglo.length()];
                 pp = new String[arreglo.length()];
@@ -87,6 +89,7 @@ public class Negocio extends SQLiteOpenHelper {
                     JSONObject renglon = arreglo.getJSONObject(i);
                     id = renglon.getInt("id");
                     denominacion = renglon.getString("denominacion_soc");
+                    slug = renglon.getString("slug");
                     giro = renglon.getString("giro");
                     descripcion = renglon.getString("descripcion");
                     principales_Prod = renglon.getString("principales_prod");
@@ -94,6 +97,7 @@ public class Negocio extends SQLiteOpenHelper {
                     if (autorizado == 1){
                         ids[j] = id;
                         denom[j] = denominacion;
+                        sl[j] = slug;
                         gir[j] = giro;
                         desc[j] = descripcion;
                         pp[j] = principales_Prod;

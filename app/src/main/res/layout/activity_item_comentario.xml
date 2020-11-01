@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView13"
+        android:id="@+id/iv_usuario"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/usuario" />
 
     <TextView
-        android:id="@+id/textView29"
+        android:id="@+id/tv_nombreComent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -27,11 +27,11 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintStart_toEndOf="@+id/iv_usuario"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView30"
+        android:id="@+id/tv_fechaComent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -42,11 +42,11 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView29" />
+        app:layout_constraintStart_toEndOf="@+id/iv_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nombreComent" />
 
     <TextView
-        android:id="@+id/textView31"
+        android:id="@+id/tv_coment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -58,5 +58,5 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView13" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_fechaComent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

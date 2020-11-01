@@ -86,6 +86,11 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         if(v.getId() == R.id.btn_buscar){
             String busqueda = buscar.getText().toString();
             if(!busqueda.isEmpty()){
+                menu.clear();
+                lvMenu.setAdapter(null);
+                String newURL = url + "/" + busqueda;
+                Tarea t3=new Tarea();
+                t3.execute(newURL);
             }
             else{
                 Toast.makeText(this, "Escribe lo que deseas buscar",Toast.LENGTH_LONG).show();
@@ -110,7 +115,13 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             aBD=new AyudanteBD(this,"Directorio",null,1);
             db = aBD.getReadableDatabase();
             if (db!=null) {
-                Cursor cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios",null);
+                Cursor cursor;
+                if(buscar.getText().toString().isEmpty()){
+                    cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios",null);
+                }
+                else {
+                    cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios WHERE slug = '"+buscar.getText().toString()+"'",null);
+                }
                 if (cursor.moveToNext()){
                     int i = 0;
                     while (cursor.moveToNext()){
