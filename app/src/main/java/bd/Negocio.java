@@ -48,8 +48,8 @@ public class Negocio extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS negocios");
         //y luego creamos la nueva
         db.execSQL(creacionNegocios);
-        Tarea t=new Tarea();
-        t.execute(url);
+        Tarea tN=new Tarea();
+        tN.execute(url);
         try {
             if (db != null) {
                 for(int i = 0;i<ids.length;i++){

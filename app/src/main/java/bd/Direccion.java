@@ -48,8 +48,8 @@ public class Direccion extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS direccion");
         //y luego creamos la nueva
         db.execSQL(creacionDireccNeg);
-        Tarea t=new Tarea();
-        t.execute(url);
+        Tarea tD=new Tarea();
+        tD.execute(url);
         try {
             if (db != null) {
                 for(int i = 0;i<ids.length;i++){

@@ -46,8 +46,8 @@ public class Contacto extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS contactoNegocio");
         //y luego creamos la nueva
         db.execSQL(creacionContatNeg);
-        Tarea t=new Tarea();
-        t.execute(url);
+        Tarea tC=new Tarea();
+        tC.execute(url);
         try {
             if (db != null) {
                 for(int i = 0;i<ids.length;i++){
