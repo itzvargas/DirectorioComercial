@@ -159,6 +159,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         if(requestCode == 10){
            Uri path = data.getData();
            logo.setImageURI(path);
+            Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
         }
     }
 }
