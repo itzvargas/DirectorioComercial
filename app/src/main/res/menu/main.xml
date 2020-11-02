@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_directorio"
-        android:orderInCategory="100"
-        android:title="Directorio Comercial"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menu_suscribirme"
         android:orderInCategory="100"
         android:title="Suscribirme al directorio"

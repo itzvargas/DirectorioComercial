@@ -8,15 +8,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class Inicio_invitado extends AppCompatActivity   {
+public class Inicio_invitado extends AppCompatActivity  implements View.OnClickListener {
 
+    Button direc, desc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_invitado);
         setTitle(getString(R.string.menu_principal));
+        direc = (Button)findViewById(R.id.btn_directorioInvi);
+        desc = (Button)findViewById(R.id.btn_descargarInvit);
+        direc.setOnClickListener(this);
+        desc.setOnClickListener(this);
     }
 
     @Override
@@ -33,10 +39,6 @@ public class Inicio_invitado extends AppCompatActivity   {
         int id = item.getItemId();
         Intent intent;
         switch (id){
-            case R.id.menu_directorio:
-                intent = new Intent(Inicio_invitado.this, Inicio_invitado.class);
-                startActivity(intent);
-                break;
             case R.id.menu_suscribirme:
                 intent = new Intent(Inicio_invitado.this, Suscribirme.class);
                 startActivity(intent);
@@ -54,9 +56,18 @@ public class Inicio_invitado extends AppCompatActivity   {
                 startActivity(intent);
                 break;
         }
-
         return true;
-
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        if(v.getId() == R.id.btn_directorioInvi){
+            intent = new Intent(Inicio_invitado.this, Negocios.class);
+            startActivity(intent);
+        }
+        if(v.getId() == R.id.btn_descargarInvit){
+            Toast.makeText(this, "Descargando...", Toast.LENGTH_LONG).show();
+        }
+    }
 }

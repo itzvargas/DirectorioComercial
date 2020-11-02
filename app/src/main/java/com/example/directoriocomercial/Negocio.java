@@ -39,7 +39,7 @@ import clases.NombreUsuario;
 public class Negocio extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     ImageView logo;
-    TextView titulo, giro;
+    TextView titulo, giro, etiqueta;
     ListView redes, comentarios;
     EditText coment;
     Button enviar;
@@ -50,6 +50,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     private ArrayList<MenuC> menuComent;
     private MenuAdapterC adapterComent;
     String modo = "";
+    int sesion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +61,19 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         logo = (ImageView)findViewById(R.id.iv_logo);
         titulo = (TextView)findViewById(R.id.tv_titulo);
         giro = (TextView)findViewById(R.id.tv_giro_negocio);
+        etiqueta = (TextView)findViewById(R.id.txt_comentario);
         redes = (ListView)findViewById(R.id.lv_redes_sociales);
         comentarios = (ListView)findViewById(R.id.lv_comentarios);
         coment = (EditText)findViewById(R.id.edt_comentarioNeg);
         enviar = (Button)findViewById(R.id.btn_enviar_ComenarioNeg);
 
+        idSesion();
         enviar.setOnClickListener(this);
+        if(sesion != 0){
+            coment.setVisibility(View.INVISIBLE);
+            enviar.setVisibility(View.INVISIBLE);
+            etiqueta.setVisibility(View.INVISIBLE);
+        }
 
         Bundle bolsaR = getIntent().getExtras();
         idNegocio = bolsaR.getInt("ID");
@@ -105,6 +113,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     }
                 }//try
                 catch (Exception e) {
+                    Toast.makeText(this, "Intentalo más tarde.",Toast.LENGTH_LONG).show();
                 }//catch
             }
             else {
@@ -116,6 +125,30 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    public void idSesion(){
+        AyudanteBD aBD;
+        SQLiteDatabase db = null;
+        try {
+            aBD = new AyudanteBD(this, "Directorio", null, 1);
+            db = aBD.getReadableDatabase();
+            if (db != null) {
+                Cursor cursor = db.rawQuery("SELECT id FROM usuarios WHERE actividad='activo'", null);
+                if (cursor.moveToNext()) {
+                    sesion = 1;
+                    cursor.close();
+                    db.close();
+                } else {
+                    cursor.close();
+                    db.close();
+                }
+            }//if
+            else {
+            }
+        }//try
+        catch (Exception e) {
+        }//catch
     }
 
     public void sinInernet(){
@@ -203,10 +236,10 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 }
                 else{
                     String name = "";
-                    int idoment;
                     NombreUsuario nu = new NombreUsuario();
                     for (int i = 0; i < arreglo.length(); i++) {
                         JSONObject renglon = arreglo.getJSONObject(i);
+                        //Obtener el nombre del que escribio el comentario para el ID del negocio seleccionado
                         name = nu.getNombreUsuario("https:.../"+idNegocio);
                         menuComent.add(new MenuC(R.drawable.usuario, name+"",renglon.getString("created_at")+"",renglon.getString("contenido")+""));
                     }
