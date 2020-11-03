@@ -40,7 +40,10 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
         Intent intent;
         switch (id){
             case R.id.menu_suscribirme:
+                Bundle bolsa = new Bundle();
+                bolsa.putString("RUTA","inicio_invitado");
                 intent = new Intent(Inicio_invitado.this, Suscribirme.class);
+                intent.putExtras(bolsa);
                 startActivity(intent);
                 break;
             case R.id.menu_contactar:
