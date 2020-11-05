@@ -21,8 +21,7 @@ public class AyudanteBD extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // En la práctica deberemos migrar datos de la tabla antigua
-        // a la nueva, por lo que este método deberá ser más elaborado.
+        // En la práctica deberemos migrar datos de la tabla antigua a la nuevo
         //Eliminamos la versión anterior de la tabla
         db.execSQL("DROP TABLE IF EXISTS usuarios");
         //y luego creamos la nueva

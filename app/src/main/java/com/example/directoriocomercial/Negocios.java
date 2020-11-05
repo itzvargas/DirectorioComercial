@@ -67,8 +67,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
 
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
-        Tarea t=new Tarea();
-        t.execute(url);
+        sinInternet();
 
         bBuscar.setOnClickListener(this);
         bBorrar.setOnClickListener(this);
@@ -80,17 +79,14 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         if(v.getId() == R.id.btn_borrar){
             menu.clear();
             lvMenu.setAdapter(null);
-            Tarea t2=new Tarea();
-            t2.execute(url);
+            sinInternet();
         }
         if(v.getId() == R.id.btn_buscar){
             String busqueda = buscar.getText().toString();
             if(!busqueda.isEmpty()){
                 menu.clear();
                 lvMenu.setAdapter(null);
-                String newURL = url + "/" + busqueda;
-                Tarea t3=new Tarea();
-                t3.execute(newURL);
+                sinInternet();
             }
             else{
                 Toast.makeText(this, "Escribe lo que deseas buscar",Toast.LENGTH_LONG).show();
@@ -147,70 +143,6 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         catch (Exception e) {
             Toast.makeText(this, "Error.",Toast.LENGTH_LONG).show();
         }//catch
-    }
-
-    //Creación de la lista y consulta a la pagina
-    class Tarea extends AsyncTask<String,Void,String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String salida=ConexionWeb(strings[0]);
-            return salida;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try{
-                JSONArray arreglo = new JSONArray(s);
-                ids = new int[arreglo.length()];
-                nom = new String[arreglo.length()];
-                gir = new String[arreglo.length()];
-                //autorizado = new int[arreglo.length()];
-                int j = 0;
-                int au;
-                for (int i = 0; i<arreglo.length(); i++){
-                    JSONObject renglon = arreglo.getJSONObject(i);
-                    au = renglon.getInt("autorizado");
-                    if(au == 1) {
-                        ids[j] = renglon.getInt("id");
-                        nom[j] = renglon.getString("denominacion_soc");
-                        gir[j] = renglon.getString("giro");
-                        menu.add(new Menu(R.drawable.tienda, nom[j] + "", gir[j]));
-                        j++;
-                    }
-                }
-                adapter = new MenuAdapter(Negocios.this, menu);
-                lvMenu.setAdapter(adapter);
-            }
-            catch(Exception e){
-                //Si no hay internet
-                sinInternet();
-            }
-        }
-    }
-    String ConexionWeb(String direccion) {
-        String pagina="";
-        try {
-            URL url = new URL(direccion);
-            HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-            if (conexion.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new
-                        InputStreamReader(conexion.getInputStream()));
-                String linea = reader.readLine();
-                while (linea != null) {
-                    pagina += linea + "\n";
-                    linea = reader.readLine();
-                }
-                reader.close();
-            } else {
-                pagina += "ERROR: " + conexion.getResponseMessage() + "\n";
-            }
-            conexion.disconnect();
-        }
-        catch (Exception e){
-            pagina+=e.getMessage();
-        }
-        return pagina;
     }
 
     //Elaboración de la lista

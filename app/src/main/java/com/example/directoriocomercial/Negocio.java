@@ -75,14 +75,16 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
             etiqueta.setVisibility(View.INVISIBLE);
         }
 
+        menu=new ArrayList<MenuR>();
+        menuComent=new ArrayList<MenuC>();
+
         Bundle bolsaR = getIntent().getExtras();
         idNegocio = bolsaR.getInt("ID");
         urlNegocio = bolsaR.getString("URL");
         mostrarInfo();
         //URL que selecciona todos los comentarios del id del negocio
         String urlComent = "" + idNegocio;
-        Tarea tC=new Tarea();
-        tC.execute(urlComent);
+        //Metodo para mostrar los comentarios del negocio
     }
 
     @Override
@@ -156,8 +158,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     }
 
     public void mostrarInfo(){
-        Tarea tM=new Tarea();
-        tM.execute(urlNegocio);
+        //Metodo para mostrar la foto del negocio
         SQLiteDatabase db=null;
         bd.Negocio negBD;
         Contacto cont;
@@ -215,66 +216,6 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     }
 
     //Consulta a la pagina para la foto
-    class Tarea extends AsyncTask<String,Void,String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String salida=ConexionWeb(strings[0]);
-            return salida;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try{
-                JSONArray arreglo = new JSONArray(s);
-                if(modo.isEmpty()) {
-                    for (int i = 0; i < arreglo.length(); i++) {
-                        JSONObject renglon = arreglo.getJSONObject(i);
-                        String foto = renglon.getString("foto");
-                        Picasso.get().load(foto).into(logo);
-                    }
-                }
-                else{
-                    String name = "";
-                    NombreUsuario nu = new NombreUsuario();
-                    for (int i = 0; i < arreglo.length(); i++) {
-                        JSONObject renglon = arreglo.getJSONObject(i);
-                        //Obtener el nombre del que escribio el comentario para el ID del negocio seleccionado
-                        name = nu.getNombreUsuario("https:.../"+idNegocio);
-                        menuComent.add(new MenuC(R.drawable.usuario, name+"",renglon.getString("created_at")+"",renglon.getString("contenido")+""));
-                    }
-                }
-            }
-            catch(Exception e){
-                //Si no hay internet
-                sinInernet();
-            }
-        }
-    }
-    String ConexionWeb(String direccion) {
-        String pagina="";
-        try {
-            URL url = new URL(direccion);
-            HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-            if (conexion.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new
-                        InputStreamReader(conexion.getInputStream()));
-                String linea = reader.readLine();
-                while (linea != null) {
-                    pagina += linea + "\n";
-                    linea = reader.readLine();
-                }
-                reader.close();
-            } else {
-                pagina += "ERROR: " + conexion.getResponseMessage() + "\n";
-            }
-            conexion.disconnect();
-        }
-        catch (Exception e){
-            pagina+=e.getMessage();
-        }
-        return pagina;
-    }
 
     //Elaboración de la lista de Comentarios
     public class MenuC {

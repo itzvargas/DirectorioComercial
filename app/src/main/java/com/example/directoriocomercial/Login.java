@@ -40,6 +40,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     boolean email,passw;
     int id = 0;
     private ProgressDialog dialog;
+    String nombre = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         String act = "activo";
-        user = usuario.getText().toString();
+        user = usuario.getText().toString().trim();
         pass = contra.getText().toString();
         Intent intent;
         Bundle bolsa = new Bundle();
@@ -82,7 +83,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     bolsa.putString("USER",user);
                     bolsa.putString("PASS",pass);
                     verificacion();
-                    registrarBDLOGIN();
                 }
                 else{
                     Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
@@ -113,13 +113,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if (db != null) {
                     db.execSQL("INSERT INTO usuarios values (" + id + ",'" + act + "')");
                     db.close();
-                    Toast.makeText(this, "Bienvenido " + user, Toast.LENGTH_LONG).show();
                 } else
                     Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
             }//try
             catch (Exception e) {
                 Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
             }
+            Toast.makeText(this, "Bienvenido " + nombre,Toast.LENGTH_LONG).show();
             intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -133,8 +133,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONObject user = new JSONObject("user");
-                    SharedPreferences userPref = Login.this.getApplicationContext().getSharedPreferences("user",Login.this.MODE_PRIVATE);
+                    JSONObject user = new JSONObject(String.valueOf(object.getJSONObject("user")));
+                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Login.MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",object.getString("token"));
                     editor.putInt("id",user.getInt("id"));
@@ -142,12 +142,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     editor.putString("name",user.getString("name"));
                     editor.putString("email",user.getString("email"));
                     editor.putString("password",user.getString("password"));
+                    nombre = user.getString("name");
                     editor.apply();
-                    Toast.makeText(this, "Bienvenido " + user.getString("name"),Toast.LENGTH_LONG).show();
+                    registrarBDLOGIN();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Correo o contraseña incorrectos.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
             }
             dialog.dismiss();
         },error -> {
