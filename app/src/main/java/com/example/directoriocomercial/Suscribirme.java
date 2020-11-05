@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,6 +34,12 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
     String ruta;
     String nom,passw,confPass,em,telef,fac;
     private ProgressDialog dialog;
+    String rol = "2",enterado;
+    Spinner enteradoU;
+    ArrayAdapter<String> adEnterado;
+    String[] maneras = {"¿Cómo te enteraste de nosotros?","Por referencias personales","Por redes sociales","Por una invitación de correo electrónico",
+            "Por un anuncio","Otro"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +50,15 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         ruta = bolsaR.getString("RUTA");
 
         nombre = (EditText)findViewById(R.id.edt_nombreU);
-        pass = (EditText)findViewById(R.id.edt_contraseñaU);
+        pass = (EditText)findViewById(R.id.edt_contrasenaU);
         email = (EditText)findViewById(R.id.edt_emailU);
-        confirP = (EditText)findViewById(R.id.edt_confirmarContraseñaU);
+        confirP = (EditText)findViewById(R.id.edt_confirmarContrasenaU);
         telefono = (EditText)findViewById(R.id.edt_telefonoU);
         face = (EditText)findViewById(R.id.edt_faceU);
         suscr = (Button)findViewById(R.id.btn_suscribirme);
+        enteradoU = (Spinner)findViewById(R.id.spinner_enterado);
+        adEnterado = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,maneras);
+        enteradoU.setAdapter(adEnterado);
 
         dialog = new ProgressDialog(Suscribirme.this);
         dialog.setCancelable(false);
@@ -67,9 +78,29 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
 
         if(v.getId() == R.id.btn_suscribirme){
             if(!nom.isEmpty() && !passw.isEmpty() && !confPass.isEmpty() && !em.isEmpty()){
-                if(passw == confPass) {
+                if(passw.equals(confPass)) {
                     //Enviar los datos a la BD
-
+                    switch (enteradoU.getSelectedItemPosition()){
+                        case 0:
+                            enterado = "1";
+                            break;
+                        case 1:
+                            enterado = "2";
+                            break;
+                        case 2:
+                            enterado = "3";
+                            break;
+                        case 3:
+                            enterado = "4";
+                            break;
+                        case 4:
+                            enterado = "5";
+                            break;
+                        case 5:
+                            enterado = "6";
+                            break;
+                    }
+                    registrar();
                     Toast.makeText(this, "Ahora puedes iniciar sesión y disfrutar de los beneficios.", Toast.LENGTH_LONG).show();
                     //Redireccion
                     if (ruta.equals("login")) {
@@ -93,7 +124,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
     }
 
     public void registrar(){
-        dialog.setMessage("Verificando");
+        dialog.setMessage("Registrando");
         dialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, Constant.REGISTRAR, response -> {
             try {
@@ -122,8 +153,14 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
+                map.put("name",nom);
                 map.put("email",em);
                 map.put("password",passw);
+                map.put("rol_id",rol);
+                map.put("enterado_id",enterado);
+                map.put("telefono",telef);
+                if(!fac.isEmpty())
+                    map.put("face",fac);
                 return map;
             }
         };

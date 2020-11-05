@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     AyudanteBD aBD;
     SQLiteDatabase db=null;
     boolean email,passw;
-    int id;
+    int id = 0;
     private ProgressDialog dialog;
 
     @Override
@@ -106,26 +106,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void registrarBDLOGIN(){
         String act = "activo";
         Intent intent;
-        Bundle bolsa = new Bundle();
-        bolsa.putString("USER",user);
-        bolsa.putString("PASS",pass);
-        try {
-            aBD = new AyudanteBD(this, "Directorio", null, 1);
-            db = aBD.getWritableDatabase();
-            if (db != null) {
-                db.execSQL("INSERT INTO usuarios values (" + id + ",'" + act + "')");
-                db.close();
-                Toast.makeText(this, "Bienvenido "+user, Toast.LENGTH_LONG).show();
-            } else
+        if(id != 0) {
+            try {
+                aBD = new AyudanteBD(this, "Directorio", null, 1);
+                db = aBD.getWritableDatabase();
+                if (db != null) {
+                    db.execSQL("INSERT INTO usuarios values (" + id + ",'" + act + "')");
+                    db.close();
+                    Toast.makeText(this, "Bienvenido " + user, Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
+            }//try
+            catch (Exception e) {
                 Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
-        }//try
-        catch (Exception e) {
-            Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
+            }
+            intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
-        intent = new Intent(Login.this, MainActivity.class);
-        intent.putExtras(bolsa);
-        startActivity(intent);
-        finish();
     }
 
     public void verificacion(){
@@ -136,7 +134,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONObject user = new JSONObject("user");
-                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Login.MODE_PRIVATE);
+                    SharedPreferences userPref = Login.this.getApplicationContext().getSharedPreferences("user",Login.this.MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",object.getString("token"));
                     editor.putInt("id",user.getInt("id"));

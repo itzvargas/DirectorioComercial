@@ -28,6 +28,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Nombre completo iniciando con apellidos"
         android:inputType="textPersonName"
+        android:maxLength="90"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"
@@ -50,6 +51,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:maxLength="100"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"
@@ -61,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_nombreU" />
 
     <EditText
-        android:id="@+id/edt_contraseñaU"
+        android:id="@+id/edt_contrasenaU"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -72,6 +74,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Contraseña"
         android:inputType="textPassword"
+        android:maxLength="15"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"
@@ -83,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_emailU" />
 
     <EditText
-        android:id="@+id/edt_confirmarContraseñaU"
+        android:id="@+id/edt_confirmarContrasenaU"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -94,6 +97,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Confirmar contraseña"
         android:inputType="textPassword"
+        android:maxLength="15"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"
@@ -102,7 +106,25 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_contraseñaU" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_contrasenaU" />
+
+    <Spinner
+        android:id="@+id/spinner_enterado"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/merriweather"
+        android:background="@drawable/style_spinner1"
+        app:autoSizeMaxTextSize="100sp"
+        android:textColor="@android:color/black"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_confirmarContrasenaU" />
 
     <EditText
         android:id="@+id/edt_telefonoU"
@@ -116,6 +138,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Teléfono"
         android:inputType="phone"
+        android:maxLength="12"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"
@@ -125,7 +148,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_confirmarContraseñaU" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_enterado" />
 
     <EditText
         android:id="@+id/edt_faceU"
@@ -139,6 +162,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Facebook\n(https://www.facebook.com/usuario)\nOPCIONAL"
         android:inputType="textPersonName"
+        android:maxLength="100"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="100sp"

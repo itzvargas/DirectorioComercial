@@ -24,8 +24,8 @@ public class AyudanteBD extends SQLiteOpenHelper {
         // En la práctica deberemos migrar datos de la tabla antigua
         // a la nueva, por lo que este método deberá ser más elaborado.
         //Eliminamos la versión anterior de la tabla
-        //db.execSQL("DROP TABLE IF EXISTS autos");
+        db.execSQL("DROP TABLE IF EXISTS usuarios");
         //y luego creamos la nueva
-        //db.execSQL(sqlCreate);
+        db.execSQL(creacionUsuarios);
     }
 }
