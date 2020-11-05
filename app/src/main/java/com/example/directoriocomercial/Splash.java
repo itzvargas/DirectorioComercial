@@ -2,7 +2,9 @@ package com.example.directoriocomercial;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,27 +61,8 @@ public class Splash extends AppCompatActivity {
     }
 
     public boolean verificacion(){
-        try{
-            aBD=new AyudanteBD(this,"Directorio",null,1);
-            db = aBD.getReadableDatabase();
-            if (db!=null) {
-                Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE actividad='activo'",null);
-                if (cursor.moveToNext()){
-                    cursor.close();
-                    db.close();
-                    return true;
-                }
-                else{
-                    cursor.close();
-                    db.close();
-                    return false;
-                }
-            }//if
-            else {
-                return false;
-            }
-        }//try
-        catch (Exception e) { return false; }//catch
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        return userPref.getBoolean("isLoggedIn",false);
     }
 
     public void actualizacion(){

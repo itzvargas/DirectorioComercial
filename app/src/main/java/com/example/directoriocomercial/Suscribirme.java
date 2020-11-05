@@ -32,7 +32,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
     EditText nombre,pass,confirP,email,telefono,face;
     Button suscr;
     String ruta;
-    String nom,passw,confPass,em,telef,fac;
+    String nom,passw,confPass,em,telef="",fac="";
     private ProgressDialog dialog;
     String rol = "2",enterado;
     Spinner enteradoU;
@@ -68,7 +68,6 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        Intent intent;
         nom = nombre.getText().toString();
         passw = pass.getText().toString();
         confPass = confirP.getText().toString();
@@ -101,17 +100,6 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
                             break;
                     }
                     registrar();
-                    Toast.makeText(this, "Ahora puedes iniciar sesión y disfrutar de los beneficios.", Toast.LENGTH_LONG).show();
-                    //Redireccion
-                    if (ruta.equals("login")) {
-                        intent = new Intent(Suscribirme.this, Login.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        intent = new Intent(Suscribirme.this, Inicio_invitado.class);
-                        startActivity(intent);
-                        finish();
-                    }
                 }
                 else {
                     Toast.makeText(this, "La contraseña no coincide.",Toast.LENGTH_LONG).show();
@@ -123,6 +111,15 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    public void reedireccion(){
+        Intent intent;
+        Toast.makeText(this, "Ahora puedes iniciar sesión y disfrutar de los beneficios.", Toast.LENGTH_LONG).show();
+        //Redireccion
+        intent = new Intent(Suscribirme.this, Login.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void registrar(){
         dialog.setMessage("Registrando");
         dialog.show();
@@ -131,18 +128,19 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONObject user = new JSONObject("user");
-                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Login.MODE_PRIVATE);
+                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Suscribirme.MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",object.getString("token"));
                     editor.putString("name",user.getString("name"));
                     editor.putString("email",user.getString("email"));
                     editor.putString("password",user.getString("password"));
+                    editor.putBoolean("isLoggedIn",true);
                     editor.apply();
-                    Toast.makeText(this, "Bienvenido " + user.getString("name"),Toast.LENGTH_LONG).show();
+                    reedireccion();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Correo o contraseña incorrectos.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
             }
             dialog.dismiss();
         },error -> {

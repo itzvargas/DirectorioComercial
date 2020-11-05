@@ -72,7 +72,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        String act = "activo";
         user = usuario.getText().toString().trim();
         pass = contra.getText().toString();
         Intent intent;
@@ -104,26 +103,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void registrarBDLOGIN(){
-        String act = "activo";
         Intent intent;
-        if(id != 0) {
-            try {
-                aBD = new AyudanteBD(this, "Directorio", null, 1);
-                db = aBD.getWritableDatabase();
-                if (db != null) {
-                    db.execSQL("INSERT INTO usuarios values (" + id + ",'" + act + "')");
-                    db.close();
-                } else
-                    Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
-            }//try
-            catch (Exception e) {
-                Toast.makeText(this, "Vuelve a intentarlo.", Toast.LENGTH_LONG).show();
-            }
-            Toast.makeText(this, "Bienvenido " + nombre,Toast.LENGTH_LONG).show();
-            intent = new Intent(Login.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        Toast.makeText(this, "Bienvenido " + nombre,Toast.LENGTH_LONG).show();
+        intent = new Intent(Login.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void verificacion(){
@@ -143,12 +127,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     editor.putString("email",user.getString("email"));
                     editor.putString("password",user.getString("password"));
                     nombre = user.getString("name");
+                    editor.putBoolean("isLoggedIn",true);
                     editor.apply();
                     registrarBDLOGIN();
                 }
+                else{
+                    Toast.makeText(this, "Correo o contraseña incorrectos.",Toast.LENGTH_LONG).show();
+                }
             }
             catch (JSONException e){
-                Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
             }
             dialog.dismiss();
         },error -> {

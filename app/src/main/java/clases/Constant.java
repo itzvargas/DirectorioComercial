@@ -6,4 +6,5 @@ public class Constant {
     public static final String API = HOME + "/api";
     public static final String USERS = API + "/login";
     public static final String REGISTRAR = HOME + "/registro";
+    public static final String INSCRIBIR = HOME + "/inscribirNegocio";
 }

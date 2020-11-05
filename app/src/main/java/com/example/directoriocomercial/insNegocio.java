@@ -1,14 +1,18 @@
 package com.example.directoriocomercial;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.view.KeyEvent;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +20,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.xml.transform.Result;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+
+import clases.Constant;
 
 
 /**
@@ -37,8 +56,21 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     EditText negocio[] = new EditText[4];
     EditText domicilio[] = new EditText[7];
     EditText contacto[] = new EditText[3];
-    Button inscr,selecionar;
+    Button inscr;
+    TextView seleccionar;
     ImageView logo;
+    private Bitmap bitmap = null;
+    private SharedPreferences userPref;
+    private ProgressDialog dialog;
+
+    //Propietario
+    //String nombre,telefono,email,fecha,face;
+    //Negocio
+    String denom,giro,descrip="",producto="";
+    //Domicilio
+    String calle,noI,noE="",colonia,codigo,munic,estado;
+    //Contacto
+    String emailN,telefonoN,horario="",page="",faceNe="",instaNe="";
 
     //URL para google maps del negocio
     //https://maps.google.com/?q=
@@ -55,6 +87,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.menu_inscribir));
         //for (int i = 0; i<5; i++)
             //propietario[i] = (EditText) rootView.findViewById(id_propietario[i]);
+        userPref = getActivity().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         for (int i = 0; i<4; i++)
             negocio[i] = (EditText) rootView.findViewById(id_negocio[i]);
         for (int i = 0; i<7; i++)
@@ -66,24 +99,18 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         faceN = (EditText)rootView.findViewById(R.id.edt_faceNeg);
         instaN = (EditText)rootView.findViewById(R.id.edt_instaNeg);
         inscr = (Button)rootView.findViewById(R.id.btn_inscribir);
-        selecionar = (Button)rootView.findViewById(R.id.seleccionarLogo);
+        seleccionar = (TextView)rootView.findViewById(R.id.seleccionarLogo);
         logo = (ImageView)rootView.findViewById(R.id.logoNeg);
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
-        selecionar.setOnClickListener(this);
+        seleccionar.setOnClickListener(this);
+        dialog = new ProgressDialog(getContext());
+        dialog.setCancelable(false);
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
-        //Propietario
-        //String nombre,telefono,email,fecha,face;
-        //Negocio
-        String denom,giro,descrip,producto;
-        //Domicilio
-        String calle,noI,noE,colonia,codigo,munic,estado;
-        //Contacto
-        String emailN,telefonoN,horario,page,faceNe,instaNe;
         int id = v.getId();
         switch (id){
             case R.id.chk_redes:
@@ -129,10 +156,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 if(!denom.isEmpty() && !giro.isEmpty() &&
                         !calle.isEmpty() && !noI.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
                         !emailN.isEmpty() && !telefonoN.isEmpty()){
-
-                    Intent intent = new Intent(getContext(),MainActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(getContext(), "Datos enviados. Se te notificará cuando este aceptado tu negocio.",Toast.LENGTH_LONG).show();
+                    guardarDatos();
                 }
                 else{
                     Toast.makeText(getContext(), "Faltan campos por llenar",Toast.LENGTH_LONG).show();
@@ -159,7 +183,101 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         if(requestCode == 10){
            Uri path = data.getData();
            logo.setImageURI(path);
-            Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
+           try {
+               bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), path);
+           }
+           catch (IOException e){
+
+           }
+           Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void guardarDatos(){
+        dialog.setMessage("Inscribiendo Negocio");
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.INSCRIBIR,response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    for (int i = 0; i<4; i++)
+                        negocio[i].setText("");
+                    for (int i = 0; i<7; i++)
+                        domicilio[i].setText("");
+                    for (int i = 0; i<3; i++)
+                        contacto[i].setText("");
+                    sociales.setChecked(false);
+                    pagina.setText("");
+                    faceN.setText("");
+                    instaN.setText("");
+                    logo.setImageResource(R.drawable.imagenlogo);
+                    Toast.makeText(getContext(), "Tu información será revisada. ¡Gracias!",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(),MainActivity.class);
+                    startActivity(intent);
+
+                }
+                else {
+                    Toast.makeText(getContext(), "Hubo un error, revisa tu información e intenta de nuevo.",Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(getContext(), "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+            dialog.dismiss();
+        }, error -> {
+            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                String token = userPref.getString("token","");
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError{
+                HashMap<String, String> map = new HashMap<>();
+                map.put("user_id",userPref.getInt("id",0)+"");
+                map.put("denominacion",denom);
+                map.put("giro",giro);
+                //if(!descrip.isEmpty())
+                    map.put("descripcion",descrip);
+                map.put("calle",calle);
+                map.put("noExt",noE);
+                //if(!noI.isEmpty())
+                    map.put("noInt",noI);
+                map.put("colonia",colonia);
+                map.put("cp",codigo);
+                map.put("municipio",munic);
+                map.put("estado",estado);
+                map.put("email",emailN);
+                map.put("telefono",telefonoN);
+                //if(!horario.isEmpty())
+                    map.put("horario",horario);
+                //if(!page.isEmpty())
+                    map.put("web",page);
+                //if(!faceNe.isEmpty())
+                    map.put("facebook",faceNe);
+                //if(!instaNe.isEmpty())
+                    map.put("instagram",instaNe);
+                map.put("image",bitmapToString(bitmap));
+                map.put("autorizado",0+"");
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(request);
+    }
+
+    private String bitmapToString(Bitmap bitmap) {
+        if(bitmap!=null){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+            byte [] array = byteArrayOutputStream.toByteArray();
+            return Base64.encodeToString(array, Base64.DEFAULT);
+        }
+        return "";
     }
 }
