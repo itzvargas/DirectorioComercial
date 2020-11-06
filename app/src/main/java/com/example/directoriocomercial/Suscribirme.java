@@ -157,8 +157,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
                 map.put("rol_id",rol);
                 map.put("enterado_id",enterado);
                 map.put("telefono",telef);
-                if(!fac.isEmpty())
-                    map.put("face",fac);
+                map.put("face",fac);
                 return map;
             }
         };

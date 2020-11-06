@@ -240,30 +240,31 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError{
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id",userPref.getInt("id",0)+"");
-                map.put("denominacion",denom);
+                map.put("denominacion_soc",denom);
+                //slug
+                map.put("image",bitmapToString(bitmap));
                 map.put("giro",giro);
                 //if(!descrip.isEmpty())
-                    map.put("descripcion",descrip);
+                map.put("descripcion",descrip);
+                map.put("principales_prod",producto);
+                map.put("autorizado",0+"");
                 map.put("calle",calle);
-                map.put("noExt",noE);
+                map.put("no_ext",noE);
                 //if(!noI.isEmpty())
-                    map.put("noInt",noI);
+                map.put("no_int",noI);
                 map.put("colonia",colonia);
                 map.put("cp",codigo);
                 map.put("municipio",munic);
                 map.put("estado",estado);
                 map.put("email",emailN);
                 map.put("telefono",telefonoN);
+                map.put("web",page);
                 //if(!horario.isEmpty())
-                    map.put("horario",horario);
-                //if(!page.isEmpty())
-                    map.put("web",page);
+                map.put("horario",horario);
                 //if(!faceNe.isEmpty())
-                    map.put("facebook",faceNe);
+                map.put("facebook",faceNe);
                 //if(!instaNe.isEmpty())
-                    map.put("instagram",instaNe);
-                map.put("image",bitmapToString(bitmap));
-                map.put("autorizado",0+"");
+                map.put("instagram",instaNe);
                 return map;
             }
         };

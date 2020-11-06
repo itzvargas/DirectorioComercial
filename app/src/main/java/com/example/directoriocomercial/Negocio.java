@@ -3,16 +3,13 @@ package com.example.directoriocomercial;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,26 +17,32 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import Adapters.MenuAdapterC;
+import Adapters.MenuAdapterR;
 import bd.AyudanteBD;
 import bd.Contacto;
 import bd.Direccion;
-import clases.NombreUsuario;
+import clases.Constant;
 
 public class Negocio extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     ImageView logo;
-    TextView titulo, giro, etiqueta;
+    TextView titulo, giro, etiqueta, existeComentarios;
     ListView redes, comentarios;
     EditText coment;
     Button enviar;
@@ -49,8 +52,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     private MenuAdapterR adapter;
     private ArrayList<MenuC> menuComent;
     private MenuAdapterC adapterComent;
-    String modo = "";
-    int sesion = 0;
+    private SharedPreferences userPref;
+    int idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +65,20 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         titulo = (TextView)findViewById(R.id.tv_titulo);
         giro = (TextView)findViewById(R.id.tv_giro_negocio);
         etiqueta = (TextView)findViewById(R.id.txt_comentario);
+        existeComentarios = (TextView)findViewById(R.id.txt_existeComentarios);
         redes = (ListView)findViewById(R.id.lv_redes_sociales);
         comentarios = (ListView)findViewById(R.id.lv_comentarios);
         coment = (EditText)findViewById(R.id.edt_comentarioNeg);
         enviar = (Button)findViewById(R.id.btn_enviar_ComenarioNeg);
 
-        idSesion();
         enviar.setOnClickListener(this);
-        if(sesion != 0){
+        userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        if(!userPref.getBoolean("isLoggedIn", false)){
             coment.setVisibility(View.INVISIBLE);
             enviar.setVisibility(View.INVISIBLE);
             etiqueta.setVisibility(View.INVISIBLE);
         }
+        idUsuario = userPref.getInt("id", 0);
 
         menu=new ArrayList<MenuR>();
         menuComent=new ArrayList<MenuC>();
@@ -82,9 +87,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         idNegocio = bolsaR.getInt("ID");
         urlNegocio = bolsaR.getString("URL");
         mostrarInfo();
-        //URL que selecciona todos los comentarios del id del negocio
-        String urlComent = "" + idNegocio;
         //Metodo para mostrar los comentarios del negocio
+        listaComentarios();
     }
 
     @Override
@@ -92,31 +96,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         if(v.getId() == R.id.btn_enviar_ComenarioNeg){
             String c = coment.getText().toString();
             if(!c.isEmpty()) {
-                AyudanteBD aBD;
-                SQLiteDatabase db = null;
-                try {
-                    aBD = new AyudanteBD(this, "Directorio", null, 1);
-                    db = aBD.getReadableDatabase();
-                    if (db != null) {
-                        Cursor cursor = db.rawQuery("SELECT id FROM usuarios WHERE actividad='activo'", null);
-                        if (cursor.moveToNext()) {
-                            int id = cursor.getInt(0);
-                            //Enviar los datos a la bd remota
-
-                            Toast.makeText(this, "Se ha enviado tu comentario.",Toast.LENGTH_LONG).show();
-                            cursor.close();
-                            db.close();
-                        } else {
-                            cursor.close();
-                            db.close();
-                        }
-                    }//if
-                    else {
-                    }
-                }//try
-                catch (Exception e) {
-                    Toast.makeText(this, "Intentalo más tarde.",Toast.LENGTH_LONG).show();
-                }//catch
+                //Enviar los datos a la bd remota
+                enviarComentario();
             }
             else {
                 Toast.makeText(this, "Escribe tu comentario.",Toast.LENGTH_LONG).show();
@@ -129,32 +110,38 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
     }
 
-    public void idSesion(){
-        AyudanteBD aBD;
-        SQLiteDatabase db = null;
-        try {
-            aBD = new AyudanteBD(this, "Directorio", null, 1);
-            db = aBD.getReadableDatabase();
-            if (db != null) {
-                Cursor cursor = db.rawQuery("SELECT id FROM usuarios WHERE actividad='activo'", null);
-                if (cursor.moveToNext()) {
-                    sesion = 1;
-                    cursor.close();
-                    db.close();
-                } else {
-                    cursor.close();
-                    db.close();
+    public void enviarComentario(){
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.PUBLICAR_COMENTARIO, response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    Toast.makeText(this, "Se ha publicado tu comentario.",Toast.LENGTH_LONG).show();
+                    coment.setText("");
+                    menuComent.clear();
+                    comentarios.setAdapter(null);
+                    listaComentarios();
                 }
-            }//if
-            else {
+                else {
+                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                }
             }
-        }//try
-        catch (Exception e) {
-        }//catch
-    }
-
-    public void sinInernet(){
-        Toast.makeText(this, "Sin conexión a Internet.",Toast.LENGTH_LONG).show();
+            catch (JSONException e){
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("user_id",idUsuario+"");
+                map.put("contenido",coment.getText().toString());
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
+        queue.add(request);
     }
 
     public void mostrarInfo(){
@@ -212,10 +199,71 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
             }
         }//try
         catch (Exception e) {}//catch
-        modo = "Mostrar Comentarios";
+    }
+
+    //Consulta a la pagina para mostrar comentarios
+    public void listaComentarios(){
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.COMENTARIOS, response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    JSONArray comentariosA = new JSONArray(String.valueOf(object.getJSONArray("comentarios")));
+                    for (int i = 0; i<comentariosA.length(); i++){
+                        JSONObject post = comentariosA.getJSONObject(i);
+                        menuComent.add(new MenuC(R.drawable.usuario, post.getString("nombre"),post.getString("created_at"),post.getString("contenido")));
+                    }
+                    adapterComent = new MenuAdapterC(this, menuComent);
+                    comentarios.setAdapter(adapterComent);
+                }
+                else{
+                    existeComentarios.setText("Sin Comentarios");
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("negocio_id",idNegocio+"");
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
+        queue.add(request);
     }
 
     //Consulta a la pagina para la foto
+    public void fotoLogo(){
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.NEGOCIO, response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    JSONObject negocio = new JSONObject(String.valueOf(object.getJSONObject("negocio")));
+                    Picasso.get().load(negocio.getString("image")).into(logo);
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id",idNegocio+"");
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
+        queue.add(request);
+    }
 
     //Elaboración de la lista de Comentarios
     public class MenuC {
@@ -244,32 +292,6 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         public String getComentario() { return comentario; }
         public void setComentario(String comentario) { this.comentario = comentario; }
     }
-    public class MenuAdapterC extends ArrayAdapter<MenuC> {
-        private Context context;
-        private ArrayList<MenuC> datos;
-
-        public MenuAdapterC(Context context, ArrayList<MenuC> datos) {
-            super(context, R.layout.activity_item_comentario, datos);
-            // Guardamos los parámetros en variables de clase.
-            this.context = context;
-            this.datos = datos;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View item = inflater.inflate(R.layout.activity_item_comentario, null);
-            ImageView foto = (ImageView) item.findViewById(R.id.iv_usuario);
-            foto.setImageResource(datos.get(position).getFoto());
-            TextView nombre = (TextView) item.findViewById(R.id.tv_nombreComent);
-            nombre.setText(datos.get(position).getNombre());
-            TextView fecha = (TextView) item.findViewById(R.id.tv_fechaComent);
-            fecha.setText(datos.get(position).getFecha());
-            TextView coment = (TextView) item.findViewById(R.id.tv_coment);
-            coment.setText(datos.get(position).getComentario());
-            return item;
-        }
-    }
 
     //Elaboración de la lista de Redes sociales
     public class MenuR {
@@ -290,26 +312,5 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         public int getFoto() { return foto; }
         public void setFoto(int foto) { this.foto = foto; }
     }
-    public class MenuAdapterR extends ArrayAdapter<MenuR> {
-        private Context context;
-        private ArrayList<MenuR> datos;
 
-        public MenuAdapterR(Context context, ArrayList<MenuR> datos) {
-            super(context, R.layout.activity_item_redes, datos);
-            // Guardamos los parámetros en variables de clase.
-            this.context = context;
-            this.datos = datos;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View item = inflater.inflate(R.layout.activity_item_redes, null);
-            ImageView foto = (ImageView) item.findViewById(R.id.iv_redS);
-            foto.setImageResource(datos.get(position).getFoto());
-            TextView nombre = (TextView) item.findViewById(R.id.tv_redS);
-            nombre.setText(datos.get(position).getNombre());
-            return item;
-        }
-    }
 }

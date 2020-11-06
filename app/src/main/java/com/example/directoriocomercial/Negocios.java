@@ -42,7 +42,6 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     EditText buscar;
     Button bBuscar, bBorrar;
     String palabra;
-    String url = "http://elsitioKOCE.com/base";
     int[] ids;
     String[] nom;
     String[] gir;
@@ -67,7 +66,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
 
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
-        sinInternet();
+        lista();
 
         bBuscar.setOnClickListener(this);
         bBorrar.setOnClickListener(this);
@@ -79,14 +78,14 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         if(v.getId() == R.id.btn_borrar){
             menu.clear();
             lvMenu.setAdapter(null);
-            sinInternet();
+            lista();
         }
         if(v.getId() == R.id.btn_buscar){
             String busqueda = buscar.getText().toString();
             if(!busqueda.isEmpty()){
                 menu.clear();
                 lvMenu.setAdapter(null);
-                sinInternet();
+                lista();
             }
             else{
                 Toast.makeText(this, "Escribe lo que deseas buscar",Toast.LENGTH_LONG).show();
@@ -98,15 +97,14 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Mostrar datos del item seleccionado
         Bundle bolsa = new Bundle();
-        bolsa.putString("URL",url+"/"+ids[position]);
+        bolsa.putString("URL",""+ids[position]);
         bolsa.putInt("ID",ids[position]);
         Intent int1 = new Intent(this,Negocio.class);
         int1.putExtras(bolsa);
         startActivity(int1);
     }
 
-    public void sinInternet(){
-        Toast.makeText(this, "Sin conexión a Internet.",Toast.LENGTH_LONG).show();
+    public void lista(){
         try{
             aBD=new AyudanteBD(this,"Directorio",null,1);
             db = aBD.getReadableDatabase();
