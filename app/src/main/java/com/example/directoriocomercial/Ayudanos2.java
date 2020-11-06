@@ -9,6 +9,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import clases.Constant;
+
 public class Ayudanos2 extends AppCompatActivity implements View.OnClickListener {
 
     EditText nombre,correo,coment;
@@ -34,13 +48,45 @@ public class Ayudanos2 extends AppCompatActivity implements View.OnClickListener
             corr = correo.getText().toString();
             com = coment.getText().toString();
             if(!nom.isEmpty() && !corr.isEmpty() && !com.isEmpty()){
-                intent = new Intent(Ayudanos2.this, Inicio_invitado.class);
-                startActivity(intent);
-                finish();
+                enviarComentario();
             }
             else {
                 Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void enviarComentario(){
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.AYUDANOS_SIN_LOGIN, response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    Intent intent = new Intent(Ayudanos2.this, Inicio_invitado.class);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(this, "Gracias por tu comentario.",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name",nombre.getText().toString());
+                map.put("email",correo.getText().toString());
+                map.put("comentario",coment.getText().toString());
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(Ayudanos2.this);
+        queue.add(request);
     }
 }

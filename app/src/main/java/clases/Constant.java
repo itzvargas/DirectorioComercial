@@ -8,16 +8,27 @@ public class Constant {
 
     //Login y suscribirse
     public static final String USERS = API + "/login";
-    public static final String REGISTRAR = HOME + "/registro";
+    public static final String REGISTRAR = API + "/registro";
 
     //Negocios
-    public static final String INSCRIBIR = HOME + "/inscribirNegocio";
-    public static final String NEGOCIO = HOME + "/negocio";
-    public static final String COMENTARIOS = HOME + "/comentarios";
-    public static final String PUBLICAR_COMENTARIO = HOME + "/publicar_comentario";
+    public static final String INSCRIBIR = API + "/inscribirNegocio";
+    public static final String NEGOCIO = API + "/negocio";
+    public static final String COMENTARIOS = API + "/comentarios";
+    public static final String PUBLICAR_COMENTARIO = API + "/publicar_comentario";
 
     //Actualizar tablas
-    public static final String ACTUALIZAR_NEGOCIO = HOME + "/negocios";
-    public static final String ACTUALIZAR_DIRECCION = HOME + "/direccion_negocios";
-    public static final String ACTUALIZAR_CONTACTO = HOME + "/contacto_negocios";
+    public static final String ACTUALIZAR_NEGOCIO = API + "/negocios";
+    public static final String ACTUALIZAR_DIRECCION = API + "/direccion_negocios";
+    public static final String ACTUALIZAR_CONTACTO = API + "/contacto_negocios";
+
+    //Eventos
+    public static final String EVENTOS = API + "/eventos";
+    public static final String REGISTRAR_EVENTO = API + "/registro_evento";
+
+    //Ayudanos
+    public static final String AYUDANOS_LOGIN = API + "/opiniones";
+    public static final String AYUDANOS_SIN_LOGIN = API + "/opiniones";
+
+    //Mis negocios
+    public static final String MIS_NEGOCIOS = API + "/negocios";
 }

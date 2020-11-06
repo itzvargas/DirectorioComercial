@@ -1,40 +1,23 @@
 package com.example.directoriocomercial;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuAdapter;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-import bd.AyudanteBD;
+import Adapters.MenuAdapter;
+import bd.Negocio;
 
 public class Negocios extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -45,11 +28,10 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     int[] ids;
     String[] nom;
     String[] gir;
-    //int[] autorizado;
     private ArrayList<Menu> menu;
     private ListView lvMenu;
     private MenuAdapter adapter;
-    AyudanteBD aBD;
+    Negocio aBD;
     SQLiteDatabase db=null;
 
     @Override
@@ -106,7 +88,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
 
     public void lista(){
         try{
-            aBD=new AyudanteBD(this,"Directorio",null,1);
+            aBD=new Negocio(this,"Directorio",null,1);
             db = aBD.getReadableDatabase();
             if (db!=null) {
                 Cursor cursor;
@@ -173,45 +155,5 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
 
         public void setFoto(int foto) { this.foto = foto; }
 
-    }
-    public class MenuAdapter extends ArrayAdapter<Menu> {
-        private Context context;
-        private ArrayList<Menu> datos;
-
-        public MenuAdapter(Context context, ArrayList<Menu> datos) {
-            super(context, R.layout.activity_item_negocio, datos);
-            // Guardamos los parámetros en variables de clase.
-            this.context = context;
-            this.datos = datos;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // En primer lugar "inflamos" una nueva vista, que será la que se
-            // mostrará en la celda del ListView. Para ello primero creamos el
-            // inflater, y después inflamos la vista.
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View item = inflater.inflate(R.layout.activity_item_negocio, null);
-
-
-            // A partir de la vista, recogeremos los controles que contiene para
-            // poder manipularlos.
-            // Recogemos el ImageView y le asignamos una foto.
-            ImageView foto = (ImageView) item.findViewById(R.id.img_negocioEditar);
-            foto.setImageResource(datos.get(position).getFoto());
-
-            // Recogemos el TextView para mostrar el nombre y establecemos el
-            // nombre.
-            TextView nombre = (TextView) item.findViewById(R.id.tv_nombre);
-            nombre.setText(datos.get(position).getNombre());
-
-            // Recogemos el TextView para mostrar el número de celda y lo
-            // establecemos.
-            TextView giro = (TextView) item.findViewById(R.id.tv_giro);
-            giro.setText(datos.get(position).getGiro());
-
-            // Devolvemos la vista para que se muestre en el ListView.
-            return item;
-        }
     }
 }

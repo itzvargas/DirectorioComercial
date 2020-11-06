@@ -156,7 +156,12 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 if(!denom.isEmpty() && !giro.isEmpty() &&
                         !calle.isEmpty() && !noI.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
                         !emailN.isEmpty() && !telefonoN.isEmpty()){
-                    guardarDatos();
+                    if(bitmap!=null){
+                        guardarDatos();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Selecciona la imagen de tu logo.",Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     Toast.makeText(getContext(), "Faltan campos por llenar",Toast.LENGTH_LONG).show();
