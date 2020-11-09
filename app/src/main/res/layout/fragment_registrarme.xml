@@ -14,7 +14,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:background="@drawable/style_spinner1"
+        android:background="@drawable/spinner_item_selector"
         android:fontFamily="@font/lato"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"
@@ -26,9 +26,9 @@
 
     <Button
         android:id="@+id/btn_buscarEvento"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/lupa"
         app:layout_constraintEnd_toEndOf="parent"

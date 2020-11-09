@@ -95,26 +95,34 @@ public class Splash extends AppCompatActivity {
                 if (networkInfo != null && networkInfo.isConnected()) {
                     // Si hay conexión a Internet en este momento
                     neg.onUpgrade(db2,0,1);
+                    db2.close();
                     direc.onUpgrade(db3,0,1);
+                    db3.close();
                     contact.onUpgrade(db4,0,1);
+                    db4.close();
+                    actulizarNegocio();
+                    actulizarDireccion();
+                    actulizarContacto();
                 } else {
+                    db2.close();
+                    db3.close();
+                    db4.close();
                     // No hay conexión a Internet en este momento
                     Toast.makeText(this, "Sin conexión a Internet",Toast.LENGTH_LONG).show();
                 }
             }//if
             else {
-
+                db2.close();
+                db3.close();
+                db4.close();
             }
+        }//try
+        catch (Exception e) {
             db2.close();
             db3.close();
             db4.close();
-        }//try
-        catch (Exception e) {
             Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }//catch
-        actulizarNegocio();
-        actulizarDireccion();
-        actulizarContacto();
     }
 
     public void actulizarNegocio(){
