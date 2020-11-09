@@ -138,6 +138,9 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
                     editor.apply();
                     reedireccion();
                 }
+                else {
+                    Toast.makeText(this, "Sin conexión a Internet. Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                }
             }
             catch (JSONException e){
                 Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();

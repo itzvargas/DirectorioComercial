@@ -78,7 +78,7 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
     }
 
     public void lista(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.MIS_NEGOCIOS, response -> {
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.MIS_NEGOCIOS+idUsuario+"/negocios", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){

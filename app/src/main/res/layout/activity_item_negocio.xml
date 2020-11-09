@@ -25,7 +25,6 @@
         android:layout_marginEnd="8dp"
         android:layout_toEndOf="@+id/img_negocioEditar"
         android:fontFamily="sans-serif-black"
-        android:text="Text"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -41,7 +40,6 @@
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/img_negocioEditar"
         android:fontFamily="@font/merriweather"
-        android:text="Text"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="15sp" />

@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -85,9 +89,18 @@ public class Splash extends AppCompatActivity {
             db3 = direc.getReadableDatabase();
             db4 = contact.getReadableDatabase();
             if (db2!=null || db3!=null || db4!=null) {
-                neg.onUpgrade(db2,0,1);
-                direc.onUpgrade(db3,0,1);
-                contact.onUpgrade(db4,0,1);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    // Si hay conexión a Internet en este momento
+                    neg.onUpgrade(db2,0,1);
+                    direc.onUpgrade(db3,0,1);
+                    contact.onUpgrade(db4,0,1);
+                } else {
+                    // No hay conexión a Internet en este momento
+                    Toast.makeText(this, "Sin conexión a Internet",Toast.LENGTH_LONG).show();
+                }
             }//if
             else {
 
@@ -97,7 +110,7 @@ public class Splash extends AppCompatActivity {
             db4.close();
         }//try
         catch (Exception e) {
-            Toast.makeText(this, "Sin conexión a Internet",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }//catch
         actulizarNegocio();
         actulizarDireccion();
@@ -105,11 +118,12 @@ public class Splash extends AppCompatActivity {
     }
 
     public void actulizarNegocio(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.ACTUALIZAR_NEGOCIO, response -> {
+        // Add the request to the RequestQueue.
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_NEGOCIO, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("negocios")));
+                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("data")));
                     db2 = neg.getWritableDatabase();
                     for (int i = 0; i<negocio.length(); i++){
                         JSONObject post = negocio.getJSONObject(i);
@@ -119,32 +133,23 @@ public class Splash extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(this, "No hay datos.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
-            //Agregar parametros
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                return map;
-            }
         };
         RequestQueue queue = Volley.newRequestQueue(Splash.this);
         queue.add(request);
     }
 
     public void actulizarDireccion(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.ACTUALIZAR_DIRECCION, response -> {
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_DIRECCION, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray direccion = new JSONArray(String.valueOf(object.getJSONArray("direccion_negocios")));
+                    JSONArray direccion = new JSONArray(String.valueOf(object.getJSONArray("data")));
                     db2 = direc.getWritableDatabase();
                     for (int i = 0; i<direccion.length(); i++){
                         JSONObject post = direccion.getJSONObject(i);
@@ -156,21 +161,12 @@ public class Splash extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(this, "No hay datos.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
-            //Agregar parametros
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                return map;
-            }
         };
         RequestQueue queue = Volley.newRequestQueue(Splash.this);
         queue.add(request);
@@ -192,21 +188,12 @@ public class Splash extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(this, "No hay datos.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
-            //Agregar parametros
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                return map;
-            }
         };
         RequestQueue queue = Volley.newRequestQueue(Splash.this);
         queue.add(request);

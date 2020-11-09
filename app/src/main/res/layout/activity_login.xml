@@ -111,7 +111,7 @@
         android:textColor="@android:color/white"
         android:textAlignment="center"
         app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
+        app:autoSizeMinTextSize="7sp"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeStepGranularity="2sp"
         app:layout_constraintEnd_toEndOf="parent"

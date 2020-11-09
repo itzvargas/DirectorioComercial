@@ -1,6 +1,7 @@
 package com.example.directoriocomercial;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,10 +15,25 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import Adapters.MenuAdapter;
 import bd.Negocio;
+import clases.Constant;
 
 public class Negocios extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -48,7 +64,10 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
 
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
+
         lista();
+        adapter = new MenuAdapter(this, menu);
+        lvMenu.setAdapter(adapter);
 
         bBuscar.setOnClickListener(this);
         bBorrar.setOnClickListener(this);
@@ -84,6 +103,33 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         Intent int1 = new Intent(this,Negocio.class);
         int1.putExtras(bolsa);
         startActivity(int1);
+    }
+
+    public void llenarlita(){
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_NEGOCIO, response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("data")));
+                    for (int i = 0; i<negocio.length(); i++){
+                        JSONObject post = negocio.getJSONObject(i);
+                        menu.add(new Menu(R.drawable.tienda,post.getString("denominacion_soc")+"",post.getString("giro")));
+                    }
+                }
+                else{
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+
+        };
+        RequestQueue queue = Volley.newRequestQueue(Negocios.this);
+        queue.add(request);
+
     }
 
     public void lista(){
