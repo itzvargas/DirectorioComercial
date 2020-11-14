@@ -81,6 +81,7 @@ public class Cerrar extends Fragment {
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.clear();
                     editor.apply();
+                    editor.commit();
                     Intent intent = new Intent(getContext(), Login.class);
                     startActivity(intent);
                     ((MainActivity)getContext()).finish();

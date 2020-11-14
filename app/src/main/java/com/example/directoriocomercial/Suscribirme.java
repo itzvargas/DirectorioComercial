@@ -77,32 +77,36 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
 
         if(v.getId() == R.id.btn_suscribirme){
             if(!nom.isEmpty() && !passw.isEmpty() && !confPass.isEmpty() && !em.isEmpty()){
-                if(passw.equals(confPass)) {
-                    //Enviar los datos a la BD
-                    switch (enteradoU.getSelectedItemPosition()){
-                        case 0:
-                            enterado = "1";
-                            break;
-                        case 1:
-                            enterado = "2";
-                            break;
-                        case 2:
-                            enterado = "3";
-                            break;
-                        case 3:
-                            enterado = "4";
-                            break;
-                        case 4:
-                            enterado = "5";
-                            break;
-                        case 5:
-                            enterado = "6";
-                            break;
+                if(passw.length() >= 8) {
+                    if (passw.equals(confPass)) {
+                        //Enviar los datos a la BD
+                        switch (enteradoU.getSelectedItemPosition()) {
+                            case 0:
+                                enterado = "1";
+                                break;
+                            case 1:
+                                enterado = "2";
+                                break;
+                            case 2:
+                                enterado = "3";
+                                break;
+                            case 3:
+                                enterado = "4";
+                                break;
+                            case 4:
+                                enterado = "5";
+                                break;
+                            case 5:
+                                enterado = "6";
+                                break;
+                        }
+                        registrar();
+                    } else {
+                        Toast.makeText(this, "La contraseña no coincide.", Toast.LENGTH_LONG).show();
                     }
-                    registrar();
                 }
-                else {
-                    Toast.makeText(this, "La contraseña no coincide.",Toast.LENGTH_LONG).show();
+                else{
+                    Toast.makeText(this, "La contraseña debe contener mínimo 8 caracteres", Toast.LENGTH_LONG).show();
                 }
             }
             else {
@@ -127,7 +131,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONObject user = new JSONObject("user");
+                    JSONObject user = new JSONObject(String.valueOf(object.getJSONObject("user")));
                     SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Suscribirme.MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",object.getString("token"));

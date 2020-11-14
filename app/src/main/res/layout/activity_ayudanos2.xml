@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Ayudanos2">
@@ -79,6 +84,50 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_nom" />
 
     <EditText
+        android:id="@+id/edt_telefono_ayudanos2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/input"
+        android:ems="10"
+        android:fontFamily="@font/merriweather"
+        android:hint="Teléfono"
+        android:inputType="phone"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_correo" />
+
+    <EditText
+        android:id="@+id/edt_asunto_ayudanos2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/input"
+        android:ems="10"
+        android:fontFamily="@font/merriweather"
+        android:hint="Asunto"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_telefono_ayudanos2" />
+
+    <EditText
         android:id="@+id/edt_comentario"
         android:layout_width="0dp"
         android:layout_height="150dp"
@@ -92,13 +141,13 @@
         android:hint="¿Cómo y qué debemos mejorar?"
         android:inputType="textMultiLine"
         android:textColor="@android:color/black"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_correo" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_asunto_ayudanos2" />
 
     <Button
         android:id="@+id/btn_enviar_comentario"
@@ -120,3 +169,4 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_comentario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

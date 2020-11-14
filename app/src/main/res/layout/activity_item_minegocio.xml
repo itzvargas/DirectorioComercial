@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/img_negocioEditar2"
-        android:layout_width="95dp"
-        android:layout_height="95dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -17,11 +17,11 @@
     <TextView
         android:id="@+id/tv_nombre2"
         android:layout_width="314dp"
-        android:layout_height="40dp"
+        android:layout_height="43dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
         android:layout_toEndOf="@+id/img_negocioEditar2"
         android:fontFamily="sans-serif-black"
@@ -32,30 +32,16 @@
     <TextView
         android:id="@+id/tv_giro2"
         android:layout_width="314dp"
-        android:layout_height="40dp"
+        android:layout_height="43dp"
         android:layout_alignBottom="@+id/img_negocioEditar2"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/img_negocioEditar2"
         android:fontFamily="@font/merriweather"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/tv_editar2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_negocioEditar2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="220dp"
-        android:layout_toEndOf="@+id/img_negocioEditar2"
-        android:fontFamily="@font/lato"
-        android:text="Editar"
-        android:textColor="#D027BF"
         android:textSize="15sp" />
 
 </RelativeLayout>

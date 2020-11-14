@@ -50,11 +50,6 @@ public class MenuAdapterMisNegocios extends ArrayAdapter<MisNegocios.MenuM> {
         TextView giro = (TextView) item.findViewById(R.id.tv_giro2);
         giro.setText(datos.get(position).getGiro());
 
-        // Recogemos el TextView para mostrar el número de celda y lo
-        // establecemos.
-        TextView edit = (TextView) item.findViewById(R.id.tv_editar2);
-        edit.setText(datos.get(position).getEditar());
-
         // Devolvemos la vista para que se muestre en el ListView.
         return item;
     }

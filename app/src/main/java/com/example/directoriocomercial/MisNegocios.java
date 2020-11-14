@@ -2,18 +2,17 @@ package com.example.directoriocomercial;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Adapters.MenuAdapterMisNegocios;
-import bd.Negocio;
 import clases.Constant;
 
 
@@ -67,6 +65,7 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         idUsuario = userPref.getInt("id",0);
         menu = new ArrayList<MenuM>();
         lv.setOnItemClickListener(this);
+        lista();
         return rootView;
     }
 
@@ -74,6 +73,9 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bolsa = new Bundle();
         bolsa.putInt("ID_N",ids[position]);
+        Intent int1 = new Intent(getContext(), EditarNegocio.class);
+        int1.putExtras(bolsa);
+        startActivity(int1);
         //Enviarlo al próximo intent
     }
 
@@ -82,13 +84,13 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("negocios")));
+                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("data")));
                     ids = new int[negocio.length()];
                     for (int i = 0; i<negocio.length(); i++){
                         JSONObject post = negocio.getJSONObject(i);
                         ids[i] = post.getInt("id");
                         menu.add(new MenuM(R.drawable.tienda, post.getString("denominacion_soc"),
-                                post.getString("giro"),"Editar"));
+                                post.getString("giro")));
                     }
                     adapterMisNegocios = new MenuAdapterMisNegocios(getContext(), menu);
                     lv.setAdapter(adapterMisNegocios);
@@ -103,6 +105,12 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         },error -> {
             Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
             //Agregar parametros
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -121,13 +129,11 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         private int foto;
         private String nombre;
         private String giro;
-        private String editar;
 
-        public MenuM(int foto, String nombre, String giro, String editar) {
+        public MenuM(int foto, String nombre, String giro) {
             this.foto = foto;
             this.nombre = nombre;
             this.giro = giro;
-            this.editar = editar;
         }
 
         public String getNombre() {
@@ -147,14 +153,6 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         public int getFoto() { return foto; }
 
         public void setFoto(int foto) { this.foto = foto; }
-
-        public String getEditar() {
-            return editar;
-        }
-
-        public void setEditar(String editar) {
-            this.editar = editar;
-        }
 
     }
 }

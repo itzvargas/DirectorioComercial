@@ -14,12 +14,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -28,8 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import Adapters.MenuAdapter;
 import bd.Negocio;
@@ -145,6 +140,9 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
                     cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios WHERE slug = '"+buscar.getText().toString()+"'",null);
                 }
                 if (cursor.moveToNext()){
+                    ids = new int[cursor.getCount()];
+                    nom = new String[cursor.getCount()];
+                    gir = new String[cursor.getCount()];
                     int i = 0;
                     while (cursor.moveToNext()){
                         ids[i] = cursor.getInt(0);
@@ -167,7 +165,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             db.close();
         }//try
         catch (Exception e) {
-            Toast.makeText(this, "Error.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, e.getMessage()+"",Toast.LENGTH_LONG).show();
         }//catch
     }
 
