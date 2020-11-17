@@ -60,7 +60,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
 
-        lista();
+        llenarlita();
         adapter = new MenuAdapter(this, menu);
         lvMenu.setAdapter(adapter);
 
@@ -92,11 +92,10 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Mostrar datos del item seleccionado
-        Bundle bolsa = new Bundle();
-        bolsa.putString("URL",""+ids[position]);
-        bolsa.putInt("ID",ids[position]);
-        Intent int1 = new Intent(this,Negocio.class);
-        int1.putExtras(bolsa);
+        Intent int1 = new Intent(Negocios.this,com.example.directoriocomercial.Negocio.class);
+        int1.putExtra("ID",ids[position]);
+        int1.putExtra("DENOMINACION",nom[position]);
+        int1.putExtra("GIRO",gir[position]);
         startActivity(int1);
     }
 
@@ -106,10 +105,18 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("data")));
+                    ids = new int[negocio.length()];
+                    nom = new String[negocio.length()];
+                    gir = new String[negocio.length()];
                     for (int i = 0; i<negocio.length(); i++){
                         JSONObject post = negocio.getJSONObject(i);
+                        ids[i] = post.getInt("id");
+                        nom[i] = post.getString("denominacion_soc");
+                        gir[i] = post.getString("giro");
                         menu.add(new Menu(R.drawable.tienda,post.getString("denominacion_soc")+"",post.getString("giro")));
                     }
+                    adapter = new MenuAdapter(this, menu);
+                    lvMenu.setAdapter(adapter);
                 }
                 else{
                 }
@@ -180,23 +187,17 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             this.nombre = nombre;
             this.giro = giro;
         }
-
         public String getNombre() {
             return nombre;
         }
-
         public void setNombre(String nombre) {
             this.nombre = nombre;
         }
-
         public String getGiro() {
             return giro;
         }
-
         public void setGiro(String giro) { this.giro = giro; }
-
         public int getFoto() { return foto; }
-
         public void setFoto(int foto) { this.foto = foto; }
 
     }

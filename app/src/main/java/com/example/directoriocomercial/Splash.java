@@ -94,11 +94,11 @@ public class Splash extends AppCompatActivity {
 
                 if (networkInfo != null && networkInfo.isConnected()) {
                     // Si hay conexión a Internet en este momento
-                    neg.onUpgrade(db2,0,1);
+                    neg.onUpgrade(db2,1,1);
                     db2.close();
-                    direc.onUpgrade(db3,0,1);
+                    direc.onUpgrade(db3,1,1);
                     db3.close();
-                    contact.onUpgrade(db4,0,1);
+                    contact.onUpgrade(db4,1,1);
                     db4.close();
                     actulizarNegocio();
                     actulizarDireccion();
@@ -181,11 +181,11 @@ public class Splash extends AppCompatActivity {
     }
 
     public void actulizarContacto(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.ACTUALIZAR_CONTACTO, response -> {
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_CONTACTO, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray contacto = new JSONArray(String.valueOf(object.getJSONArray("contacto_negocios")));
+                    JSONArray contacto = new JSONArray(String.valueOf(object.getJSONArray("data")));
                     db2 = contact.getWritableDatabase();
                     for (int i = 0; i<contacto.length(); i++){
                         JSONObject post = contacto.getJSONObject(i);

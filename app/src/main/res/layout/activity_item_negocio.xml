@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:textAlignment="center">
 
     <ImageView
@@ -27,7 +28,10 @@
         android:fontFamily="sans-serif-black"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform" />
 
     <TextView
         android:id="@+id/tv_giro"
@@ -42,6 +46,9 @@
         android:fontFamily="@font/merriweather"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        android:textSize="15sp" />
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform" />
 
 </RelativeLayout>

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class EditarNegocio extends AppCompatActivity {
+public class EditarNegocio extends AppCompatActivity implements View.OnClickListener {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +39,10 @@ public class EditarNegocio extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

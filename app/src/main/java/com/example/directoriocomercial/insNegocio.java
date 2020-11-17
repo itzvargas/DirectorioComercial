@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -99,8 +100,8 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         faceN = (EditText)rootView.findViewById(R.id.edt_faceNeg);
         instaN = (EditText)rootView.findViewById(R.id.edt_instaNeg);
         inscr = (Button)rootView.findViewById(R.id.btn_inscribir);
-        seleccionar = (TextView)rootView.findViewById(R.id.seleccionarLogo);
-        logo = (ImageView)rootView.findViewById(R.id.logoNeg);
+        //seleccionar = (TextView)rootView.findViewById(R.id.seleccionarLogo);
+        //logo = (ImageView)rootView.findViewById(R.id.logoNeg);
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
         seleccionar.setOnClickListener(this);
@@ -154,47 +155,44 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 instaNe = instaN.getText().toString();
 
                 if(!denom.isEmpty() && !giro.isEmpty() &&
-                        !calle.isEmpty() && !noI.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
+                        !calle.isEmpty() && !noE.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
                         !emailN.isEmpty() && !telefonoN.isEmpty()){
-                    if(bitmap!=null){
+                    //if(bitmap!=null){
                         guardarDatos();
-                    }
+                    /*}
                     else {
                         Toast.makeText(getContext(), "Selecciona la imagen de tu logo.",Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 }
                 else{
                     Toast.makeText(getContext(), "Faltan campos por llenar",Toast.LENGTH_LONG).show();
                 }
                 break;
-            case R.id.seleccionarLogo:
-                cargarImagen();
-                break;
+            //case R.id.seleccionarLogo:
+              //  cargarImagen();
+               // break;
         }
     }
 
     public void cargarImagen(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/");
-        startActivityForResult(intent.createChooser(intent,"Seleccione la aplicación"),10);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent,10);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        for (Fragment fragment : getChildFragmentManager().getFragments()) {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
-        if(requestCode == 10){
+        if(resultCode== getActivity().RESULT_OK && requestCode == 10){
            Uri path = data.getData();
            logo.setImageURI(path);
            try {
-               bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), path);
+               bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), path);
            }
            catch (IOException e){
-
+               Toast.makeText(getContext(), e.getMessage(),Toast.LENGTH_LONG).show();
            }
-           Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
+           //Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -230,7 +228,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             }
             dialog.dismiss();
         }, error -> {
-            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), error.getMessage(),Toast.LENGTH_LONG).show();
             dialog.dismiss();
         }){
             @Override
@@ -244,15 +242,15 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError{
                 HashMap<String, String> map = new HashMap<>();
-                map.put("user_id",userPref.getInt("id",0)+"");
+                map.put("token",userPref.getString("token",""));
+                //map.put("user_id",userPref.getInt("id",0)+"");
                 map.put("denominacion_soc",denom);
                 //slug
-                map.put("image",bitmapToString(bitmap));
                 map.put("giro",giro);
                 //if(!descrip.isEmpty())
                 map.put("descripcion",descrip);
                 map.put("principales_prod",producto);
-                map.put("autorizado",0+"");
+                //map.put("autorizado",0+"");
                 map.put("calle",calle);
                 map.put("no_ext",noE);
                 //if(!noI.isEmpty())
@@ -277,6 +275,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         queue.add(request);
     }
 
+    /*
     private String bitmapToString(Bitmap bitmap) {
         if(bitmap!=null){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -285,5 +284,5 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             return Base64.encodeToString(array, Base64.DEFAULT);
         }
         return "";
-    }
+    }*/
 }
