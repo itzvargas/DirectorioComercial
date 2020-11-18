@@ -25,7 +25,7 @@ import clases.Constant;
 
 public class Ayudanos2 extends AppCompatActivity implements View.OnClickListener {
 
-    EditText nombre,correo,coment;
+    EditText nombre,correo,coment,telef,asunto;
     Button enviar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +35,23 @@ public class Ayudanos2 extends AppCompatActivity implements View.OnClickListener
         nombre = (EditText)findViewById(R.id.edt_nom);
         correo = (EditText)findViewById(R.id.edt_correo);
         coment = (EditText)findViewById(R.id.edt_comentario);
+        telef = (EditText)findViewById(R.id.edt_telefono_ayudanos2);
+        asunto = (EditText)findViewById(R.id.edt_asunto_ayudanos2);
         enviar = (Button)findViewById(R.id.btn_enviar_comentario);
         enviar.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        String nom, corr, com;
+        String nom, corr, com, tel, asun;
         Intent intent;
         if(v.getId() == R.id.btn_enviar_comentario){
             nom = nombre.getText().toString();
             corr = correo.getText().toString();
             com = coment.getText().toString();
-            if(!nom.isEmpty() && !corr.isEmpty() && !com.isEmpty()){
+            tel = telef.getText().toString();
+            asun = asunto.getText().toString();
+            if(!nom.isEmpty() && !corr.isEmpty() && !asun.isEmpty() && !com.isEmpty()){
                 enviarComentario();
             }
             else {

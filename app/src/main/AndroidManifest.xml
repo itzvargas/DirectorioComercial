@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EditarNegocio"></activity>
+        <activity android:name=".Maps"></activity>
+        <activity android:name=".EditarNegocio" />
         <activity
             android:name=".Recuperacion"
             android:theme="@style/AppTheme.NoActionBar" />
