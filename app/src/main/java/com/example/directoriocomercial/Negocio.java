@@ -90,7 +90,6 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         menuR=new ArrayList<MenuR>();
         menuComent=new ArrayList<MenuC>();
 
-        //fotoLogo();
         mostrarInfo();
         //Metodo para mostrar los comentarios del negocio
         //listaComentarios();
@@ -169,26 +168,23 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
     public void mostrarInfo(){
         //Metodo para mostrar la foto del negocio
-
-        StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_CONTACTO, response -> {
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.NEGOCIO_INDIVIDUAL+idNegocio, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray contacto = new JSONArray(String.valueOf(object.getJSONArray("data")));
-                    for (int i = 0; i<contacto.length(); i++){
-                        JSONObject post = contacto.getJSONObject(i);
-                        if(post.getInt("negocio_id") == idNegocio){
-                            giro.setText(post.getString("horario")+"");
-                            menuR.add(new MenuR(R.drawable.correo2, post.getString("email")+""));
-                            menuR.add(new MenuR(R.drawable.llamada2, post.getString("telefono")+""));
-                            if(!post.getString("web").isEmpty())
-                                menuR.add(new MenuR(R.drawable.web2, post.getString("web")+""));
-                            if(!post.getString("facebook").isEmpty())
-                                menuR.add(new MenuR(R.drawable.face2, post.getString("facebook")+""));
-                            if(!post.getString("instagram").isEmpty())
-                                menuR.add(new MenuR(R.drawable.insta2, post.getString("instagram")+""));
-                        }
-                    }
+                    JSONObject negocio = object.getJSONObject("negocio");
+                    if(!(negocio.getString("image") + "").equals("null"))
+                        Picasso.get().load(Constant.FOTO+negocio.getString("image")).into(logo);
+                    JSONObject post = negocio.getJSONObject("contacto");
+                    giro.setText(post.getString("horario")+"");
+                    menuR.add(new MenuR(R.drawable.correo2, post.getString("email")+""));
+                    menuR.add(new MenuR(R.drawable.llamada2, post.getString("telefono")+""));
+                    if(!(post.getString("web") + "").equals("null"))
+                        menuR.add(new MenuR(R.drawable.web2, post.getString("web")+""));
+                    if(!(post.getString("facebook") + "").equals("null"))
+                        menuR.add(new MenuR(R.drawable.face2, post.getString("facebook")+""));
+                    if(!(post.getString("instagram") + "").equals("null"))
+                        menuR.add(new MenuR(R.drawable.insta2, post.getString("instagram")+""));
                     adapterR = new MenuAdapterR(this, menuR);
                     redes.setAdapter(adapterR);
                 }
@@ -269,27 +265,6 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         queue.add(request);
     }
 
-    //Consulta a la pagina para la foto
-    public void fotoLogo(){
-        StringRequest request = new StringRequest(Request.Method.GET, Constant.NEGOCIO_INDIVIDUAL+idNegocio, response -> {
-            try {
-                JSONObject object =  new JSONObject(response);
-                if(object.getBoolean("success")){
-                    JSONObject negocio = new JSONObject(String.valueOf(object.getJSONObject("negocio")));
-                    if(!negocio.getString("image").isEmpty())
-                        Picasso.get().load(Constant.FOTO+negocio.getString("image")).into(logo);
-                }
-            }
-            catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
-            }
-        },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
-        }){
-        };
-        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
-        queue.add(request);
-    }
 
     //Elaboración de la lista de Comentarios
     public class MenuC {

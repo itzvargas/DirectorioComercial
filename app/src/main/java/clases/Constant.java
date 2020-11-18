@@ -15,6 +15,7 @@ public class Constant {
     public static final String INSCRIBIR = API + "/negocios/create";
     public static final String NEGOCIO = API + "/directorio";
     public static final String NEGOCIO_INDIVIDUAL = API + "/negocios/";
+    public static final String EDITAR_NEGOCIO = API + "/negocios/";
     public static final String COMENTARIOS = API + "/comentarios";
     public static final String PUBLICAR_COMENTARIO = API + "/publicar_comentario";
 
@@ -35,5 +36,5 @@ public class Constant {
     public static final String MIS_NEGOCIOS = API + "/usuarios/";
 
     //Imagenes
-    public static final String FOTO = HOME + "/storage/";
+    public static final String FOTO = URL + "directorio-ca/storage/app/public/";
 }

@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditarNegocio">
@@ -128,35 +126,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_descripcionEditar" />
 
-    <ImageView
-        android:id="@+id/logoNegEditar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_productosEditar"
-        app:srcCompat="@drawable/imagenlogo" />
-
-    <TextView
-        android:id="@+id/seleccionarLogoEditar"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="10dp"
-        android:fontFamily="@font/merriweather"
-        android:text="Seleccionar\nImagen"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/logoNegEditar"
-        app:layout_constraintTop_toBottomOf="@+id/edt_productosEditar" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
@@ -173,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoNegEditar" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_productosEditar" />
 
     <EditText
         android:id="@+id/edt_calleEditar"
@@ -499,7 +468,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/btn_redondeado_verde"
-        android:text="Enviar"
+        android:text="Editar"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         app:autoSizeMaxTextSize="100sp"

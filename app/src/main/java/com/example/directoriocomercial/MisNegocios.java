@@ -71,20 +71,18 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle bolsa = new Bundle();
-        bolsa.putInt("ID_N",ids[position]);
         Intent int1 = new Intent(getContext(), EditarNegocio.class);
-        int1.putExtras(bolsa);
+        int1.putExtra("ID_N",ids[position]);
         startActivity(int1);
         //Enviarlo al próximo intent
     }
 
     public void lista(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.MIS_NEGOCIOS+idUsuario+"/negocios", response -> {
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.MIS_NEGOCIOS+idUsuario+"/negocios", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("data")));
+                    JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("negocios")));
                     ids = new int[negocio.length()];
                     for (int i = 0; i<negocio.length(); i++){
                         JSONObject post = negocio.getJSONObject(i);
@@ -109,14 +107,6 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("Authorization","Bearer "+token);
-                return map;
-            }
-            //Agregar parametros
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("token",token);
-                map.put("user_id",idUsuario+"");
                 return map;
             }
         };

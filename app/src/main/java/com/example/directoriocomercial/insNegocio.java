@@ -50,7 +50,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     CheckBox sociales;
     //int id_propietario[] = {R.id.edt_nombreUsuario,R.id.edt_telefonoUsuario,R.id.edt_emailUsuario,R.id.edt_fechaNacUsuario,R.id.edt_faceUsuario};
     int id_negocio[] = {R.id.edt_denominacion,R.id.edt_giro,R.id.edt_descripcion,R.id.edt_productos};
-    int id_domicilio[] = {R.id.edt_calle,R.id.edt_noInt,R.id.edt_noExt,R.id.edt_colonia,R.id.edt_codigoPos,R.id.edt_municipio,R.id.edt_estado};
+    int id_domicilio[] = {R.id.edt_calle,R.id.edt_noExt,R.id.edt_noInt,R.id.edt_colonia,R.id.edt_codigoPos,R.id.edt_municipio,R.id.edt_estado};
     int id_contacto[] = {R.id.edt_emailNeg,R.id.edt_telefonoNeg,R.id.edt_horario};
     EditText pagina,faceN,instaN;
     //EditText propietario[] = new EditText[5];
@@ -58,8 +58,6 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     EditText domicilio[] = new EditText[7];
     EditText contacto[] = new EditText[3];
     Button inscr;
-    TextView seleccionar;
-    ImageView logo;
     private Bitmap bitmap = null;
     private SharedPreferences userPref;
     private ProgressDialog dialog;
@@ -100,11 +98,8 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         faceN = (EditText)rootView.findViewById(R.id.edt_faceNeg);
         instaN = (EditText)rootView.findViewById(R.id.edt_instaNeg);
         inscr = (Button)rootView.findViewById(R.id.btn_inscribir);
-        //seleccionar = (TextView)rootView.findViewById(R.id.seleccionarLogo);
-        //logo = (ImageView)rootView.findViewById(R.id.logoNeg);
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
-        seleccionar.setOnClickListener(this);
         dialog = new ProgressDialog(getContext());
         dialog.setCancelable(false);
         return rootView;
@@ -139,8 +134,8 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 producto = negocio[3].getText().toString();
 
                 calle = domicilio[0].getText().toString();
-                noI = domicilio[1].getText().toString();
-                noE = domicilio[2].getText().toString();
+                noE = domicilio[1].getText().toString();
+                noI = domicilio[2].getText().toString();
                 colonia = domicilio[3].getText().toString();
                 codigo = domicilio[4].getText().toString();
                 munic = domicilio[5].getText().toString();
@@ -157,42 +152,12 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 if(!denom.isEmpty() && !giro.isEmpty() &&
                         !calle.isEmpty() && !noE.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
                         !emailN.isEmpty() && !telefonoN.isEmpty()){
-                    //if(bitmap!=null){
                         guardarDatos();
-                    /*}
-                    else {
-                        Toast.makeText(getContext(), "Selecciona la imagen de tu logo.",Toast.LENGTH_LONG).show();
-                    }*/
                 }
                 else{
                     Toast.makeText(getContext(), "Faltan campos por llenar",Toast.LENGTH_LONG).show();
                 }
                 break;
-            //case R.id.seleccionarLogo:
-              //  cargarImagen();
-               // break;
-        }
-    }
-
-    public void cargarImagen(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent,10);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(resultCode== getActivity().RESULT_OK && requestCode == 10){
-           Uri path = data.getData();
-           logo.setImageURI(path);
-           try {
-               bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), path);
-           }
-           catch (IOException e){
-               Toast.makeText(getContext(), e.getMessage(),Toast.LENGTH_LONG).show();
-           }
-           //Toast.makeText(getContext(), "Imagen seleccionada.",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -213,7 +178,6 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                     pagina.setText("");
                     faceN.setText("");
                     instaN.setText("");
-                    logo.setImageResource(R.drawable.imagenlogo);
                     Toast.makeText(getContext(), "Tu información será revisada. ¡Gracias!",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getContext(),MainActivity.class);
                     startActivity(intent);
