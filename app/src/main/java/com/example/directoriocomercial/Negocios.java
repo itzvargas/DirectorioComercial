@@ -74,7 +74,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         if(v.getId() == R.id.btn_borrar){
             menu.clear();
             lvMenu.setAdapter(null);
-            lista();
+            llenarlita();
         }
         if(v.getId() == R.id.btn_buscar){
             String busqueda = buscar.getText().toString();

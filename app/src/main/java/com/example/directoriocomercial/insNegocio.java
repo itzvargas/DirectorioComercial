@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +104,156 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         sociales.setOnClickListener(this);
         dialog = new ProgressDialog(getContext());
         dialog.setCancelable(false);
+
+        negocio[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!negocio[0].getText().toString().isEmpty()){
+                    negocio[0].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        negocio[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!negocio[1].getText().toString().isEmpty()){
+                    negocio[1].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[0].getText().toString().isEmpty()){
+                    domicilio[0].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[1].getText().toString().isEmpty()){
+                    domicilio[1].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[3].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[3].getText().toString().isEmpty()){
+                    domicilio[3].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[4].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[4].getText().toString().isEmpty()){
+                    domicilio[4].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[5].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[5].getText().toString().isEmpty()){
+                    domicilio[5].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        domicilio[6].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!domicilio[6].getText().toString().isEmpty()){
+                    domicilio[6].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        contacto[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!contacto[0].getText().toString().isEmpty()){
+                    contacto[0].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        contacto[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!contacto[1].getText().toString().isEmpty()){
+                    contacto[1].setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         return rootView;
     }
 
@@ -149,16 +301,55 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 faceNe = faceN.getText().toString();
                 instaNe = instaN.getText().toString();
 
-                if(!denom.isEmpty() && !giro.isEmpty() &&
-                        !calle.isEmpty() && !noE.isEmpty() && !colonia.isEmpty() && !codigo.isEmpty() && !munic.isEmpty() && !estado.isEmpty() &&
-                        !emailN.isEmpty() && !telefonoN.isEmpty()){
-                        guardarDatos();
-                }
-                else{
-                    Toast.makeText(getContext(), "Faltan campos por llenar",Toast.LENGTH_LONG).show();
+                if(validate()){
+                    guardarDatos();
                 }
                 break;
         }
+    }
+
+    private boolean validate(){
+        if(denom.isEmpty()){
+            negocio[0].setError("Denominación requerida");
+            return false;
+        }
+        if(giro.isEmpty()){
+            negocio[1].setError("Giro requerido");
+            return false;
+        }
+        if(calle.isEmpty()){
+            domicilio[0].setError("Calle requerida");
+            return false;
+        }
+        if(noE.isEmpty()){
+            domicilio[1].setError("Numero exterior requerido");
+            return false;
+        }
+        if(colonia.isEmpty()){
+            domicilio[3].setError("Colonia requerida");
+            return false;
+        }
+        if(codigo.isEmpty()){
+            domicilio[4].setError("Código postal requerido");
+            return false;
+        }
+        if(munic.isEmpty()){
+            domicilio[5].setError("Municipio requerido");
+            return false;
+        }
+        if(estado.isEmpty()){
+            domicilio[6].setError("Estado requerido");
+            return false;
+        }
+        if(emailN.isEmpty()){
+            contacto[0].setError("Email requerido");
+            return false;
+        }
+        if(telefonoN.isEmpty()){
+            contacto[1].setError("Teléfono requerido");
+            return false;
+        }
+        return true;
     }
 
     public void guardarDatos(){
@@ -181,7 +372,6 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                     Toast.makeText(getContext(), "Tu información será revisada. ¡Gracias!",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getContext(),MainActivity.class);
                     startActivity(intent);
-
                 }
                 else {
                     Toast.makeText(getContext(), "Hubo un error, revisa tu información e intenta de nuevo.",Toast.LENGTH_LONG).show();

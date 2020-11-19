@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -64,10 +66,48 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         dialog = new ProgressDialog(Login.this);
         dialog.setCancelable(false);
 
-        try{
-            aBD=new AyudanteBD(this,"Directorio",null,1);
-        }//try
-        catch (Exception e) {}
+        usuario.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!usuario.getText().toString().isEmpty()){
+                    usuario.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        contra.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!contra.getText().toString().isEmpty()){
+                    contra.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+    }
+
+    private boolean validate(){
+        if(user.isEmpty()){
+            usuario.setError("Email requerido");
+            return false;
+        }
+        if(pass.isEmpty()){
+            contra.setError("Contraseña requerida");
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -78,13 +118,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         Bundle bolsa = new Bundle();
         switch (v.getId()) {
             case R.id.btn_login:
-                if(!user.isEmpty() && !pass.isEmpty()) {
+                if(validate()) {
                     bolsa.putString("USER",user);
                     bolsa.putString("PASS",pass);
                     verificacion();
-                }
-                else{
-                    Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.btn_invitado:
@@ -142,7 +179,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }
             dialog.dismiss();
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Correo o contraseña incorrectos.",Toast.LENGTH_LONG).show();
             dialog.dismiss();
         }){
             //Agregar parametros

@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -64,6 +66,66 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         dialog.setCancelable(false);
 
         suscr.setOnClickListener(this);
+
+        nombre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!nombre.getText().toString().isEmpty()){
+                    nombre.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        pass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!pass.getText().toString().isEmpty()){
+                    pass.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        confirP.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!confirP.getText().toString().isEmpty()){
+                    confirP.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!email.getText().toString().isEmpty()){
+                    email.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -76,43 +138,59 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         fac = face.getText().toString();
 
         if(v.getId() == R.id.btn_suscribirme){
-            if(!nom.isEmpty() && !passw.isEmpty() && !confPass.isEmpty() && !em.isEmpty()){
-                if(passw.length() >= 8) {
-                    if (passw.equals(confPass)) {
-                        //Enviar los datos a la BD
-                        switch (enteradoU.getSelectedItemPosition()) {
-                            case 0:
-                                enterado = "1";
-                                break;
-                            case 1:
-                                enterado = "2";
-                                break;
-                            case 2:
-                                enterado = "3";
-                                break;
-                            case 3:
-                                enterado = "4";
-                                break;
-                            case 4:
-                                enterado = "5";
-                                break;
-                            case 5:
-                                enterado = "6";
-                                break;
-                        }
-                        registrar();
-                    } else {
-                        Toast.makeText(this, "La contraseña no coincide.", Toast.LENGTH_LONG).show();
-                    }
+            if(validate()){
+                //Enviar los datos a la BD
+                switch (enteradoU.getSelectedItemPosition()) {
+                    case 0:
+                        enterado = "1";
+                        break;
+                    case 1:
+                        enterado = "2";
+                        break;
+                    case 2:
+                        enterado = "3";
+                        break;
+                    case 3:
+                        enterado = "4";
+                        break;
+                    case 4:
+                        enterado = "5";
+                        break;
+                    case 5:
+                        enterado = "6";
+                        break;
                 }
-                else{
-                    Toast.makeText(this, "La contraseña debe contener mínimo 8 caracteres", Toast.LENGTH_LONG).show();
-                }
-            }
-            else {
-                Toast.makeText(this, "Faltan campos por llenar",Toast.LENGTH_LONG).show();
+                registrar();
             }
         }
+    }
+
+    private boolean validate(){
+        if(nom.isEmpty()){
+            nombre.setError("Nombre requerido");
+            return false;
+        }
+        if(em.isEmpty()){
+            email.setError("Email requerido");
+            return false;
+        }
+        if(passw.isEmpty()){
+            pass.setError("Contraseña requerida");
+            return false;
+        }
+        if(confPass.isEmpty()){
+            confirP.setError("Confirma contraseña");
+            return false;
+        }
+        if(passw.length() < 8){
+            pass.setError("Contraseña igual o mayor a 8 caracteres");
+            return false;
+        }
+        if(!passw.equals(confPass)){
+            pass.setError("La contraseña no coincide");
+            return false;
+        }
+        return true;
     }
 
     public void reedireccion(){
