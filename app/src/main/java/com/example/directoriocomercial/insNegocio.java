@@ -162,7 +162,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     }
 
     public void guardarDatos(){
-        dialog.setMessage("Inscribiendo Negocio");
+        dialog.setMessage("Inscribiendo negocio");
         dialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, Constant.INSCRIBIR,response -> {
             try {

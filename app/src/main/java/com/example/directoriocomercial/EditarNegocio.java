@@ -225,7 +225,7 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     }
 
     public void editarDatos(){
-        dialog.setMessage("Editando Negocio");
+        dialog.setMessage("Editando negocio");
         dialog.show();
         StringRequest request = new StringRequest(Request.Method.PUT, Constant.EDITAR_NEGOCIO+idNegocio+"/update", response -> {
             try {

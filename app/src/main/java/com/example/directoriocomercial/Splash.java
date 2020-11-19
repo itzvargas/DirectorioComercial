@@ -54,7 +54,7 @@ public class Splash extends AppCompatActivity {
         neg =new Negocio(this,"Directorio",null,1);
         direc =new Direccion(this,"Directorio",null,1);
         contact =new Contacto(this,"Directorio",null,1);
-        actualizacion();
+        //actualizacion();
         boolean verif = verificacion();
         if(verif == true) {
             new Handler().postDelayed(new Runnable() {

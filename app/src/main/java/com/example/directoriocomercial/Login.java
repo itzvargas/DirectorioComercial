@@ -92,6 +92,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.txt_recuperar:
+                intent = new Intent(Login.this, Recuperacion.class);
+                startActivity(intent);
                 break;
             case R.id.txt_suscribirse:
                 intent = new Intent(Login.this, Suscribirme.class);
