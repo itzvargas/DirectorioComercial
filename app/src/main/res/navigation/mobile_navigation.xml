@@ -45,4 +45,9 @@
         android:name="com.example.directoriocomercial.Cerrar"
         android:label="fragment_cerrar"
         tools:layout="@layout/fragment_cerrar" />
+    <fragment
+        android:id="@+id/misEventos2"
+        android:name="com.example.directoriocomercial.misEventos"
+        android:label="Mis Eventos"
+        tools:layout="@layout/fragment_mis_eventos" />
 </navigation>

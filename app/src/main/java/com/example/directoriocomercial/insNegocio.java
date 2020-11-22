@@ -333,6 +333,10 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
             domicilio[4].setError("Código postal requerido");
             return false;
         }
+        if(codigo.length() != 5){
+            domicilio[4].setError("Código postal debe ser igual a 5 caracteres");
+            return false;
+        }
         if(munic.isEmpty()){
             domicilio[5].setError("Municipio requerido");
             return false;
@@ -347,6 +351,14 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         }
         if(telefonoN.isEmpty()){
             contacto[1].setError("Teléfono requerido");
+            return false;
+        }
+        if(telefonoN.length() < 10){
+            contacto[1].setError("Teléfono debe ser igual a 10 o 12 caracteres");
+            return false;
+        }
+        if(telefonoN.length() == 11 ){
+            contacto[1].setError("Teléfono debe ser igual a 10 o 12 caracteres");
             return false;
         }
         return true;

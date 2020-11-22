@@ -343,6 +343,7 @@
         android:fontFamily="@font/merriweather"
         android:hint="Teléfono **"
         android:inputType="phone"
+        android:maxLength="12"
         android:textAlignment="center"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"

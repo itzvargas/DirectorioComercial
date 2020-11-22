@@ -13,13 +13,17 @@
             android:icon="@drawable/inscr"
             android:title="Inscribir mi negocio" />
         <item
+            android:id="@+id/registrarme"
+            android:icon="@drawable/calendario"
+            android:title="Registrarme a un evento" />
+        <item
             android:id="@+id/misNegocios"
             android:icon="@drawable/negocio"
             android:title="Mis negocios" />
         <item
-            android:id="@+id/registrarme"
+            android:id="@+id/misEventos2"
             android:icon="@drawable/calendario"
-            android:title="Registrarme a un evento" />
+            android:title="Mis eventos" />
         <item
             android:id="@+id/cerrar"
             android:icon="@drawable/cerrar"

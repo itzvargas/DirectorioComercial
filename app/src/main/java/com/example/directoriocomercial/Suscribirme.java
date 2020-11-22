@@ -34,7 +34,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
     EditText nombre,pass,confirP,email,telefono,face;
     Button suscr;
     String ruta;
-    String nom,passw,confPass,em,telef="",fac="";
+    String nom,passw,confPass,em,telef,fac="";
     private ProgressDialog dialog;
     String rol = "2",enterado;
     Spinner enteradoU;
@@ -126,6 +126,21 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             public void afterTextChanged(Editable s) {
             }
         });
+
+        telefono.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!telefono.getText().toString().isEmpty()){
+                    telefono.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -188,6 +203,18 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         }
         if(!passw.equals(confPass)){
             pass.setError("La contraseña no coincide");
+            return false;
+        }
+        if(telef.isEmpty()){
+            telefono.setError("Teléfono requerido");
+            return false;
+        }
+        if(telefono.length() < 10){
+            telefono.setError("Teléfono debe ser igual a 10 o 12 caracteres");
+            return false;
+        }
+        if(telefono.length() == 11 ){
+            telefono.setError("Teléfono debe ser igual a 10 o 12 caracteres");
             return false;
         }
         return true;

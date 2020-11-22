@@ -33,9 +33,9 @@ import clases.Constant;
 public class Negocios extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     ListView negocios;
-    EditText buscar;
-    Button bBuscar, bBorrar;
-    String palabra;
+    //EditText buscar;
+    //Button bBuscar, bBorrar;
+    //String palabra;
     int[] ids;
     String[] nom;
     String[] gir;
@@ -53,9 +53,9 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         negocios = (ListView)findViewById(R.id.lv_negocios);
-        buscar = (EditText)findViewById(R.id.edt_buscar);
-        bBuscar = (Button)findViewById(R.id.btn_buscar);
-        bBorrar = (Button)findViewById(R.id.btn_borrar);
+        //buscar = (EditText)findViewById(R.id.edt_buscar);
+        //bBuscar = (Button)findViewById(R.id.btn_buscar);
+        //bBorrar = (Button)findViewById(R.id.btn_borrar);
 
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
@@ -64,14 +64,14 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         adapter = new MenuAdapter(this, menu);
         lvMenu.setAdapter(adapter);
 
-        bBuscar.setOnClickListener(this);
-        bBorrar.setOnClickListener(this);
+        //bBuscar.setOnClickListener(this);
+        //bBorrar.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_borrar){
+        /*if(v.getId() == R.id.btn_borrar){
             menu.clear();
             lvMenu.setAdapter(null);
             llenarlita();
@@ -86,7 +86,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             else{
                 Toast.makeText(this, "Escribe lo que deseas buscar",Toast.LENGTH_LONG).show();
             }
-        }
+        }*/
     }
 
     @Override
@@ -132,48 +132,6 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         RequestQueue queue = Volley.newRequestQueue(Negocios.this);
         queue.add(request);
 
-    }
-
-    public void lista(){
-        try{
-            aBD=new Negocio(this,"Directorio",null,1);
-            db = aBD.getReadableDatabase();
-            if (db!=null) {
-                Cursor cursor;
-                if(buscar.getText().toString().isEmpty()){
-                    cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios",null);
-                }
-                else {
-                    cursor = db.rawQuery("SELECT id,denominacion_soc,giro FROM negocios WHERE slug = '"+buscar.getText().toString()+"'",null);
-                }
-                if (cursor.moveToNext()){
-                    ids = new int[cursor.getCount()];
-                    nom = new String[cursor.getCount()];
-                    gir = new String[cursor.getCount()];
-                    int i = 0;
-                    while (cursor.moveToNext()){
-                        ids[i] = cursor.getInt(0);
-                        nom[i] = cursor.getString(1);
-                        gir[i] = cursor.getString(2);
-                        menu.add(new Menu(R.drawable.tienda,nom[i]+"",gir[i]));
-                        i++;
-                    }//while
-                    adapter = new MenuAdapter(this, menu);
-                    lvMenu.setAdapter(adapter);
-                }
-                else{
-                    Toast.makeText(this, "No hay datos.",Toast.LENGTH_LONG).show();
-                }
-                cursor.close();
-            }//if
-            else {
-                Toast.makeText(this, "No hay datos.",Toast.LENGTH_LONG).show();
-            }
-            db.close();
-        }//try
-        catch (Exception e) {
-            Toast.makeText(this, e.getMessage()+"",Toast.LENGTH_LONG).show();
-        }//catch
     }
 
     //Elaboración de la lista

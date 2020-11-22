@@ -256,6 +256,7 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(EditarNegocio.this, EditarNegocio.class);
                 intent.putExtra("ID_N",idNegocio);
                 startActivity(intent);
+                finish();
                 break;
         }
         return true;
@@ -358,6 +359,14 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
         }
         if(telefonoN.isEmpty()){
             contacto[1].setError("Teléfono requerido");
+            return false;
+        }
+        if(telefonoN.length() < 10){
+            contacto[1].setError("Teléfono debe ser igual a 10 o 12 caracteres");
+            return false;
+        }
+        if(telefonoN.length() == 11 ){
+            contacto[1].setError("Teléfono debe ser igual a 10 o 12 caracteres");
             return false;
         }
         return true;

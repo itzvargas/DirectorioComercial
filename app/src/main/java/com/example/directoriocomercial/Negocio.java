@@ -164,7 +164,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 }
                 break;
             case "Web":
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(accion[position])));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+accion[position])));
                 break;
             case "Face":
                 String FACEBOOK_URL = "https://www.facebook.com/" + accion[position];

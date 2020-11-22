@@ -83,18 +83,19 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONArray negocio = new JSONArray(String.valueOf(object.getJSONArray("negocios")));
-                    ids = new int[negocio.length()];
-                    for (int i = 0; i<negocio.length(); i++){
-                        JSONObject post = negocio.getJSONObject(i);
-                        ids[i] = post.getInt("id");
-                        menu.add(new MenuM(R.drawable.tienda, post.getString("denominacion_soc"),
-                                post.getString("giro")));
+                    if(negocio.length() != 0) {
+                        ids = new int[negocio.length()];
+                        for (int i = 0; i < negocio.length(); i++) {
+                            JSONObject post = negocio.getJSONObject(i);
+                            ids[i] = post.getInt("id");
+                            menu.add(new MenuM(R.drawable.tienda, post.getString("denominacion_soc"),
+                                    post.getString("giro")));
+                        }
+                        adapterMisNegocios = new MenuAdapterMisNegocios(getContext(), menu);
+                        lv.setAdapter(adapterMisNegocios);
                     }
-                    adapterMisNegocios = new MenuAdapterMisNegocios(getContext(), menu);
-                    lv.setAdapter(adapterMisNegocios);
-                }
-                else{
-                    Toast.makeText(getContext(), "No tienes negocios inscritos.",Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(getContext(), "No tienes negocios inscritos.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){

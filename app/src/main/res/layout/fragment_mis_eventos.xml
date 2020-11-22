@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".Registrarme" >
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".misEventos" >
 
     <Spinner
-        android:id="@+id/sp_eventos"
+        android:id="@+id/sp_miseventos2"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/spinner_item_selector"
         android:fontFamily="@font/lato"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toStartOf="@+id/btn_buscarEvento"
+        app:layout_constraintEnd_toStartOf="@+id/btn_buscarmiEvento2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_buscarEvento"
+        android:id="@+id/btn_buscarmiEvento2"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="25dp"
@@ -35,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txt_info_evento"
+        android:id="@+id/txt_info_mievento2"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="10dp"
@@ -49,30 +53,29 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_eventos" />
+        app:layout_constraintTop_toBottomOf="@+id/sp_miseventos2" />
 
     <Button
-        android:id="@+id/btn_registrarme"
+        android:id="@+id/btn_eliminarRegistro"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/btn_redondeado_verde"
-        android:fontFamily="@font/merriweather"
-        android:text="Registrarme"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_redondeado_rojo"
+        android:fontFamily="@font/lato"
+        android:text="Eliminar mi registro"
         android:textColor="@android:color/white"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
+        android:textSize="20sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView13"
+        android:id="@+id/imageView12"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginStart="10dp"
@@ -80,9 +83,10 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintBottom_toTopOf="@+id/btn_registrarme"
+        app:layout_constraintBottom_toTopOf="@+id/btn_eliminarRegistro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_info_evento" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_info_mievento2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

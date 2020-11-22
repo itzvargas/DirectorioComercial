@@ -1,8 +1,8 @@
 package com.example.directoriocomercial;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,18 +31,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import Adapters.MenuAdapterC;
 import clases.Constant;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Registrarme extends Fragment implements View.OnClickListener {
+public class misEventos extends Fragment implements AdapterView.OnClickListener{
 
-    Spinner eventos;
-    TextView info;
-    Button registro,buscar;
+    Spinner sp_misEventos;
+    Button buscar_mievento, eliminar;
+    TextView infomievento;
     String[] informacion;
     String[] nombres;
 
@@ -48,8 +46,8 @@ public class Registrarme extends Fragment implements View.OnClickListener {
     int[] ids;
     private SharedPreferences userPref;
     String token;
-
-    public Registrarme() {
+    int idUsuario;
+    public misEventos() {
         // Required empty public constructor
     }
 
@@ -58,43 +56,24 @@ public class Registrarme extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootview = inflater.inflate(R.layout.fragment_registrarme, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.menu_registrarme));
-        eventos = (Spinner)rootview.findViewById(R.id.sp_eventos);
-        info = (TextView)rootview.findViewById(R.id.txt_info_evento);
-        registro = (Button)rootview.findViewById(R.id.btn_registrarme);
-        buscar = (Button)rootview.findViewById(R.id.btn_buscarEvento);
-        registro.setOnClickListener(this);
-        buscar.setOnClickListener(this);
+        rootview = inflater.inflate(R.layout.fragment_mis_eventos, container, false);
+        sp_misEventos = (Spinner) rootview.findViewById(R.id.sp_miseventos2);
+        buscar_mievento = (Button)rootview.findViewById(R.id.btn_buscarmiEvento2);
+        eliminar = (Button)rootview.findViewById(R.id.btn_eliminarRegistro);
+        infomievento = (TextView)rootview.findViewById(R.id.txt_info_mievento2);
+        buscar_mievento.setOnClickListener(this);
+        eliminar.setOnClickListener(this);
+
         userPref = getActivity().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token", "");
-        //idUsuario = userPref.getInt("id",0);
-        llenarSpinner();
+        idUsuario = userPref.getInt("id",0);
+        llenarMisEventos();
+
         return rootview;
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.btn_registrarme){
-            if(eventos.getSelectedItemPosition()==0){
-                Toast.makeText(getContext(), "Selecciona un evento.",Toast.LENGTH_LONG).show();
-            }
-            else {
-                registrarme();
-            }
-        }
-        if(v.getId() == R.id.btn_buscarEvento){
-            if(eventos.getSelectedItemPosition()==0){
-                Toast.makeText(getContext(), "Selecciona un evento.",Toast.LENGTH_LONG).show();
-            }
-            else {
-                info.setText(informacion[eventos.getSelectedItemPosition()]);
-            }
-        }
-    }
-
-    public void llenarSpinner(){
-        StringRequest request = new StringRequest(Request.Method.GET, Constant.EVENTOS, response -> {
+    public void llenarMisEventos(){
+        StringRequest request = new StringRequest(Request.Method.GET, Constant.MOSTRAR_MIS_EVENTO+idUsuario+"/eventos", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
@@ -123,31 +102,10 @@ public class Registrarme extends Fragment implements View.OnClickListener {
                         informacion[i+1] = cadena;
                     }
                     adNombres = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,nombres);
-                    eventos.setAdapter(adNombres);
+                    sp_misEventos.setAdapter(adNombres);
                 }
                 else{
-                }
-            }
-            catch (JSONException e){
-                Toast.makeText(getContext(), "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
-            }
-        },error -> {
-            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
-        }){
-        };
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-    }
-
-    public void registrarme(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.REGISTRAR_EVENTO+ids[eventos.getSelectedItemPosition()]+"", response -> {
-            try {
-                JSONObject object =  new JSONObject(response);
-                if(object.getBoolean("success")){
-                    Toast.makeText(getContext(), "Gracias por registrarte.",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(getContext(), "Ya estás registrado.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "No tienes eventos.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){
@@ -162,7 +120,6 @@ public class Registrarme extends Fragment implements View.OnClickListener {
                 map.put("Authorization","Bearer "+token);
                 return map;
             }
-            //Agregar parametros
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
@@ -172,5 +129,49 @@ public class Registrarme extends Fragment implements View.OnClickListener {
         };
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(request);
+    }
+
+    public void eliminarRegistro(){
+        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.REGISTRAR_EVENTO+ids[sp_misEventos.getSelectedItemPosition()]+"/delete", response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    Toast.makeText(getContext(), "Registro eliminado.",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "No tienes eventos.",Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(getContext(), "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("token",token);
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(request);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_buscarmiEvento2){
+            infomievento.setText(informacion[sp_misEventos.getSelectedItemPosition()]);
+        }
+        if(v.getId() == R.id.btn_eliminarRegistro){
+            eliminarRegistro();
+        }
     }
 }

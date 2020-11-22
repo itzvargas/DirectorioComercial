@@ -2,7 +2,7 @@ package clases;
 
 public class Constant {
     //Raíz
-    public static final String URL = "http://192.168.0.20/";
+    public static final String URL = "http://192.168.0.12/";
     public static final String HOME = URL + "directorio-ca/public";
     public static final String API = HOME + "/api";
 
@@ -26,7 +26,8 @@ public class Constant {
 
     //Eventos
     public static final String EVENTOS = API + "/eventos";
-    public static final String REGISTRAR_EVENTO = API + "/registro_evento";
+    public static final String REGISTRAR_EVENTO = API + "/registrate/";
+    public static final String MOSTRAR_MIS_EVENTO = API + "/usuarios/";
 
     //Ayudanos
     public static final String AYUDANOS_LOGIN = API + "/opiniones";
