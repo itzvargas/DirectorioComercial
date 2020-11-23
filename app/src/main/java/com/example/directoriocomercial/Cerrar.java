@@ -50,7 +50,10 @@ public class Cerrar extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_cerrar, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Cerrar Sesión");
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle("Cerrar Sesión");
+        if (((MainActivity) getActivity()).getSupportActionBar() != null) {
+            ((MainActivity) getActivity()).getSupportActionBar().hide();
+        }
         userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token", "");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
