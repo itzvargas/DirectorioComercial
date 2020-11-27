@@ -1,5 +1,6 @@
 package com.example.directoriocomercial;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -44,6 +45,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     private MenuAdapter adapter;
     Negocio aBD;
     SQLiteDatabase db=null;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +62,15 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         menu=new ArrayList<Menu>();
         lvMenu=(ListView)findViewById(R.id.lv_negocios);
 
-        llenarlita();
         adapter = new MenuAdapter(this, menu);
         lvMenu.setAdapter(adapter);
 
         //bBuscar.setOnClickListener(this);
         //bBorrar.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        llenarlita();
     }
 
     @Override
@@ -100,6 +104,8 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
     }
 
     public void llenarlita(){
+        dialog.setMessage("Cargando directorio");
+        dialog.show();
         StringRequest request = new StringRequest(Request.Method.GET, Constant.ACTUALIZAR_NEGOCIO, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
@@ -113,7 +119,7 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
                         ids[i] = post.getInt("id");
                         nom[i] = post.getString("denominacion_soc");
                         gir[i] = post.getString("giro");
-                        menu.add(new Menu(R.drawable.tienda,post.getString("denominacion_soc")+"",post.getString("giro")));
+                        menu.add(new Menu(R.drawable.tienda,post.getString("denominacion_soc")+"",post.getString("giro"),post.getString("image")));
                     }
                     adapter = new MenuAdapter(this, menu);
                     lvMenu.setAdapter(adapter);
@@ -124,8 +130,10 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
             catch (JSONException e){
                 Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
             }
+            dialog.dismiss();
         },error -> {
             Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }){
 
         };
@@ -139,11 +147,13 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         private int foto;
         private String nombre;
         private String giro;
+        private String url;
 
-        public Menu(int foto, String nombre, String giro) {
+        public Menu(int foto, String nombre, String giro, String url) {
             this.foto = foto;
             this.nombre = nombre;
             this.giro = giro;
+            this.url = url;
         }
         public String getNombre() {
             return nombre;
@@ -156,7 +166,9 @@ public class Negocios extends AppCompatActivity implements View.OnClickListener,
         }
         public void setGiro(String giro) { this.giro = giro; }
         public int getFoto() { return foto; }
-        public void setFoto(int foto) { this.foto = foto; }
+        public void setFoto(int foto) { this.foto = foto;}
+        public String getURL() { return url; }
+        public void setURL(String url) { this.url = url;}
 
     }
 }

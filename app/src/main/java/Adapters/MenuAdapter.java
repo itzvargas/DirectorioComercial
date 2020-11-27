@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import com.example.directoriocomercial.Negocios;
 import com.example.directoriocomercial.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import clases.Constant;
 
 public class MenuAdapter extends ArrayAdapter<Negocios.Menu> {
     private Context context;
@@ -48,6 +51,9 @@ public class MenuAdapter extends ArrayAdapter<Negocios.Menu> {
         // establecemos.
         TextView giro = (TextView) item.findViewById(R.id.tv_giro);
         giro.setText(datos.get(position).getGiro());
+
+        if(!datos.get(position).getURL().equals("null"))
+            Picasso.get().load(Constant.FOTO+datos.get(position).getURL()).into(foto);
 
         // Devolvemos la vista para que se muestre en el ListView.
         return item;

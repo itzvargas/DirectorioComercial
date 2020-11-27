@@ -273,6 +273,7 @@ public class Registrarme extends Fragment implements View.OnClickListener {
                     }
                     adNombres = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,nombres);
                     eventos.setAdapter(adNombres);
+                    registro.setVisibility(View.VISIBLE);
                 }
                 else{
                 }
@@ -293,6 +294,7 @@ public class Registrarme extends Fragment implements View.OnClickListener {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
+                    registro.setVisibility(View.INVISIBLE);
                     Toast.makeText(getContext(), "Gracias por registrarte.",Toast.LENGTH_LONG).show();
                 }
                 else{

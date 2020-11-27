@@ -65,6 +65,7 @@
         android:fontFamily="@font/merriweather"
         android:text="Registrarme"
         android:textColor="@android:color/white"
+        android:visibility="invisible"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
