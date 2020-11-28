@@ -1,12 +1,14 @@
 package com.example.directoriocomercial;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,8 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
     String token;
     private ArrayList<MenuM> menu;
     private MenuAdapterMisNegocios adapterMisNegocios;
+    private ProgressDialog dialog;
+    private SwipeRefreshLayout refreshLayout;
 
     public MisNegocios() {
         // Required empty public constructor
@@ -65,7 +69,18 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         idUsuario = userPref.getInt("id",0);
         menu = new ArrayList<MenuM>();
         lv.setOnItemClickListener(this);
+        dialog = new ProgressDialog(getContext());
+        dialog.setCancelable(false);
         lista();
+        refreshLayout = rootView.findViewById(R.id.swipeHome);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapterMisNegocios.clear();
+                lv.setAdapter(null);
+                lista();
+            }
+        });
         return rootView;
     }
 
@@ -78,6 +93,8 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
     }
 
     public void lista(){
+        dialog.setMessage("Cargando mis negocios");
+        dialog.show();
         StringRequest request = new StringRequest(Request.Method.GET, Constant.MIS_NEGOCIOS+idUsuario+"/negocios", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
@@ -89,7 +106,7 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
                             JSONObject post = negocio.getJSONObject(i);
                             ids[i] = post.getInt("id");
                             menu.add(new MenuM(R.drawable.tienda, post.getString("denominacion_soc"),
-                                    post.getString("giro")));
+                                    post.getString("giro"),post.getString("image")));
                         }
                         adapterMisNegocios = new MenuAdapterMisNegocios(getContext(), menu);
                         lv.setAdapter(adapterMisNegocios);
@@ -101,8 +118,12 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
             catch (JSONException e){
                 Toast.makeText(getContext(), "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
             }
+            dialog.dismiss();
+            refreshLayout.setRefreshing(false);
         },error -> {
             Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+            refreshLayout.setRefreshing(false);
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -120,11 +141,13 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         private int foto;
         private String nombre;
         private String giro;
+        private String url;
 
-        public MenuM(int foto, String nombre, String giro) {
+        public MenuM(int foto, String nombre, String giro, String url) {
             this.foto = foto;
             this.nombre = nombre;
             this.giro = giro;
+            this.url = url;
         }
 
         public String getNombre() {
@@ -144,6 +167,14 @@ public class MisNegocios extends Fragment implements AdapterView.OnItemClickList
         public int getFoto() { return foto; }
 
         public void setFoto(int foto) { this.foto = foto; }
+
+        public String getURL() {
+            return url;
+        }
+
+        public void setURL(String url) {
+            this.url = url;
+        }
 
     }
 }

@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:textAlignment="center">
 
     <ImageView
         android:id="@+id/img_negocioEditar"
         android:layout_width="95dp"
         android:layout_height="95dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:src="@drawable/tienda" />
+        android:src="@drawable/tienda"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_nombre"
-        android:layout_width="314dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="8dp"
-        android:layout_toEndOf="@+id/img_negocioEditar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
         android:fontFamily="sans-serif-black"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform" />
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_negocioEditar"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_giro"
-        android:layout_width="314dp"
-        android:layout_height="45dp"
-        android:layout_alignBottom="@+id/img_negocioEditar"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@+id/img_negocioEditar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:fontFamily="@font/merriweather"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform" />
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_negocioEditar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nombre" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

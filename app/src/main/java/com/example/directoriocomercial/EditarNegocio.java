@@ -9,9 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,10 +31,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +56,8 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     EditText domicilio[] = new EditText[7];
     EditText contacto[] = new EditText[3];
     Button inscr;
+    ImageView image;
+    TextView buscarImage;
     private SharedPreferences userPref;
     private ProgressDialog dialog;
     //Propietario
@@ -60,6 +69,7 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     //Contacto
     String emailN,telefonoN,horario="",page="",faceNe="",instaNe="";
     int idNegocio;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +89,14 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
         faceN = (EditText)findViewById(R.id.edt_faceNegEditar);
         instaN = (EditText)findViewById(R.id.edt_instaNegEditar);
         inscr = (Button)findViewById(R.id.btn_editar);
+        image = (ImageView)findViewById(R.id.logoNegEditar);
+        buscarImage = (TextView)findViewById(R.id.seleccionarLogoEditar);
 
         mostrarDatos();
 
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
+        buscarImage.setOnClickListener(this);
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
 
@@ -317,6 +330,30 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                     builder.show();
                 }
                 break;
+            case R.id.seleccionarLogoEditar:
+                cargarImagen();
+                break;
+        }
+    }
+
+    public void cargarImagen(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(intent.createChooser(intent,"Seleccione"),10);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == 10){
+            Uri path = data.getData();
+            //image.setImageURI(path);
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),path);
+                image.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -387,6 +424,8 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                         negocio[2].setText((neg.getString("descripcion")));
                     if(!(neg.getString("principales_prod") + "").equals("null"))
                         negocio[3].setText((neg.getString("principales_prod")));
+                    if(!(neg.getString("image") + "").equals("null"))
+                        Picasso.get().load(Constant.FOTO+neg.getString("image")).into(image);
 
                     domicilio[0].setText((direcc.getString("calle") + ""));
                     domicilio[1].setText((direcc.getString("no_ext") + ""));
@@ -464,6 +503,7 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 //if(!descrip.isEmpty())
                 map.put("descripcion",descrip);
                 map.put("principales_prod",producto);
+                map.put("image",bitmapToString(bitmap));
                 //map.put("autorizado",0+"");
                 map.put("calle",calle);
                 map.put("no_ext",noE);
@@ -487,5 +527,15 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
         };
         RequestQueue queue = Volley.newRequestQueue(EditarNegocio.this);
         queue.add(request);
+    }
+
+    private String bitmapToString(Bitmap bitmap) {
+        if(bitmap!=null){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+            byte[] array = byteArrayOutputStream.toByteArray();
+            return Base64.encodeToString(array, Base64.DEFAULT);
+        }
+        return "";
     }
 }

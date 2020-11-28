@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -63,6 +66,8 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
     private Bitmap bitmap = null;
     private SharedPreferences userPref;
     private ProgressDialog dialog;
+    ImageView image;
+    TextView buscarImage;
 
     //Propietario
     //String nombre,telefono,email,fecha,face;
@@ -100,8 +105,11 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         faceN = (EditText)rootView.findViewById(R.id.edt_faceNeg);
         instaN = (EditText)rootView.findViewById(R.id.edt_instaNeg);
         inscr = (Button)rootView.findViewById(R.id.btn_inscribir);
+        image = (ImageView)rootView.findViewById(R.id.logoNeg);
+        buscarImage = (TextView)rootView.findViewById(R.id.seleccionarLogo);
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
+        buscarImage.setOnClickListener(this);
         dialog = new ProgressDialog(getContext());
         dialog.setCancelable(false);
 
@@ -305,8 +313,33 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                     guardarDatos();
                 }
                 break;
+            case R.id.seleccionarLogo:
+                cargarImagen();
+                break;
         }
     }
+
+    public void cargarImagen(){
+        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(intent.createChooser(intent,"Seleccione"),10);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == 10){
+            Uri path = data.getData();
+            //image.setImageURI(path);
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
+                image.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private boolean validate(){
         if(denom.isEmpty()){
@@ -416,6 +449,7 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
                 //if(!descrip.isEmpty())
                 map.put("descripcion",descrip);
                 map.put("principales_prod",producto);
+                map.put("image",bitmapToString(bitmap));
                 //map.put("autorizado",0+"");
                 map.put("calle",calle);
                 map.put("no_ext",noE);
@@ -441,14 +475,14 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener {
         queue.add(request);
     }
 
-    /*
+
     private String bitmapToString(Bitmap bitmap) {
         if(bitmap!=null){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-            byte [] array = byteArrayOutputStream.toByteArray();
+            byte[] array = byteArrayOutputStream.toByteArray();
             return Base64.encodeToString(array, Base64.DEFAULT);
         }
         return "";
-    }*/
+    }
 }
