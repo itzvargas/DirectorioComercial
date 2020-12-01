@@ -331,7 +331,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
-        android:text="Mostrar mi ubicación\nen Google Maps"
+        android:text="Mostrar mi ubicación\nactual en Google Maps"
         android:textAlignment="center"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"

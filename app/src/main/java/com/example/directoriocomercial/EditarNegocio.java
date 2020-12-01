@@ -305,8 +305,17 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.chk_ubicacionEditar:
-                if(ubicacion.isChecked())
+                if(ubicacion.isChecked()) {
+                    ActivityCompat.requestPermissions(EditarNegocio.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        return;
+                    }
+                    locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    url = "<iframe src=\"https://maps.google.com/maps?q="+ loc.getLatitude()+","+ loc.getLongitude()+"&hl=es&z=14&amp;output=embed\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\" aria-hidden=\"false\" tabindex=\"0\"></iframe>";
                     verUbic.setEnabled(true);
+                }
                 else {
                     url = "";
                     verUbic.setEnabled(false);
@@ -355,14 +364,6 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 cargarImagen();
                 break;
             case R.id.btn_ubicacionEditar:
-                ActivityCompat.requestPermissions(EditarNegocio.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                {
-                    return;
-                }
-                locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                url = "<iframe src=\"https://maps.google.com/maps?q="+ loc.getLatitude()+","+ loc.getLongitude()+"&hl=es&z=14&amp;output=embed\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\" aria-hidden=\"false\" tabindex=\"0\"></iframe>";
                 Intent intent1 = new Intent(this, Maps.class);
                 intent1.putExtra("iframe",url+"");
                 startActivity(intent1);
@@ -535,6 +536,8 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     }
 
     public void mostrarDatos(){
+        dialog.setMessage("Mostrando datos");
+        dialog.show();
         StringRequest request = new StringRequest(Request.Method.GET, Constant.NEGOCIO_INDIVIDUAL+idNegocio, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
@@ -576,12 +579,15 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 else{
                     Toast.makeText(this, "No hay",Toast.LENGTH_LONG).show();
                 }
+                dialog.dismiss();
             }
             catch (JSONException e){
                 Toast.makeText(this, e.getMessage()+"",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         },error -> {
             Toast.makeText(this, error.getMessage()+"",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }){
         };
         RequestQueue queue = Volley.newRequestQueue(EditarNegocio.this);
