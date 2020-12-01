@@ -1,15 +1,21 @@
 package com.example.directoriocomercial;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -43,9 +49,11 @@ import java.util.Map;
 
 import clases.Constant;
 
-public class EditarNegocio extends AppCompatActivity implements View.OnClickListener {
+public class EditarNegocio extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    CheckBox sociales;
+    private LocationManager locManager;
+    private Location loc;
+    CheckBox sociales,ubicacion;
     //int id_propietario[] = {R.id.edt_nombreUsuario,R.id.edt_telefonoUsuario,R.id.edt_emailUsuario,R.id.edt_fechaNacUsuario,R.id.edt_faceUsuario};
     int id_negocio[] = {R.id.edt_denominacionEditar,R.id.edt_giroEditar,R.id.edt_descripcionEditar,R.id.edt_productosEditar};
     int id_domicilio[] = {R.id.edt_calleEditar,R.id.edt_noExtEditar,R.id.edt_noIntEditar,R.id.edt_coloniaEditar,R.id.edt_codigoPosEditar,R.id.edt_municipioEditar,R.id.edt_estadoEditar};
@@ -55,7 +63,7 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     EditText negocio[] = new EditText[4];
     EditText domicilio[] = new EditText[7];
     EditText contacto[] = new EditText[3];
-    Button inscr;
+    Button inscr,verUbic;
     ImageView image;
     TextView buscarImage;
     private SharedPreferences userPref;
@@ -69,7 +77,9 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
     //Contacto
     String emailN,telefonoN,horario="",page="",faceNe="",instaNe="";
     int idNegocio;
-    Bitmap bitmap;
+    Bitmap bitmap = null;
+    Boolean rS,ubi;
+    String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,21 +95,24 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
         for (int i = 0; i<3; i++)
             contacto[i] = (EditText)findViewById(id_contacto[i]);
         sociales = (CheckBox)findViewById(R.id.chk_redesEditar);
+        ubicacion = (CheckBox)findViewById(R.id.chk_ubicacionEditar);
         pagina = (EditText)findViewById(R.id.edt_paginaWEditar);
         faceN = (EditText)findViewById(R.id.edt_faceNegEditar);
         instaN = (EditText)findViewById(R.id.edt_instaNegEditar);
         inscr = (Button)findViewById(R.id.btn_editar);
+        verUbic = (Button)findViewById(R.id.btn_ubicacionEditar);
         image = (ImageView)findViewById(R.id.logoNegEditar);
         buscarImage = (TextView)findViewById(R.id.seleccionarLogoEditar);
+        
 
-        mostrarDatos();
-
+        ubicacion.setOnClickListener(this);
+        verUbic.setOnClickListener(this);
         inscr.setOnClickListener(this);
         sociales.setOnClickListener(this);
         buscarImage.setOnClickListener(this);
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
-
+        mostrarDatos();
         negocio[0].addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -291,6 +304,14 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                     instaN.setVisibility(View.INVISIBLE);
                 }
                 break;
+            case R.id.chk_ubicacionEditar:
+                if(ubicacion.isChecked())
+                    verUbic.setEnabled(true);
+                else {
+                    url = "";
+                    verUbic.setEnabled(false);
+                }
+                break;
             case R.id.btn_editar:
                 denom = negocio[0].getText().toString();
                 giro = negocio[1].getText().toString();
@@ -333,6 +354,110 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
             case R.id.seleccionarLogoEditar:
                 cargarImagen();
                 break;
+            case R.id.btn_ubicacionEditar:
+                ActivityCompat.requestPermissions(EditarNegocio.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                {
+                    return;
+                }
+                locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                url = "<iframe src=\"https://maps.google.com/maps?q="+ loc.getLatitude()+","+ loc.getLongitude()+"&hl=es&z=14&amp;output=embed\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\" aria-hidden=\"false\" tabindex=\"0\"></iframe>";
+                Intent intent1 = new Intent(this, Maps.class);
+                intent1.putExtra("iframe",url+"");
+                startActivity(intent1);
+                //texto += "Latitud " + loc.getLatitude();
+                //texto += "\nLongitud " + loc.getLongitude();
+                //texto += "\nAltitud" + loc.getAltitude();
+                //texto += "\nPrecision " + loc.getAccuracy();
+                //Toast.makeText(getContext(), texto+"",Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("denom",negocio[0].getText().toString());
+        outState.putString("giro",negocio[1].getText().toString());
+        outState.putString("descrip",negocio[2].getText().toString());
+        outState.putString("producto",negocio[3].getText().toString());
+
+        outState.putString("calle",domicilio[0].getText().toString());
+        outState.putString("noE",domicilio[1].getText().toString());
+        outState.putString("noI",domicilio[2].getText().toString());
+        outState.putString("colonia",domicilio[3].getText().toString());
+        outState.putString("codigo",domicilio[4].getText().toString());
+        outState.putString("munic",domicilio[5].getText().toString());
+        outState.putString("estado",domicilio[6].getText().toString());
+
+        outState.putString("emailN",contacto[0].getText().toString());
+        outState.putString("telefonoN",contacto[1].getText().toString());
+        outState.putString("horario",contacto[2].getText().toString());
+
+        outState.putString("page",pagina.getText().toString());
+        outState.putString("faceNe",faceN.getText().toString());
+        outState.putString("instaNe",instaN.getText().toString());
+
+        if(sociales.isChecked())
+            outState.putBoolean("redes",true);
+        else
+            outState.putBoolean("redes",false);
+        if(ubicacion.isChecked())
+            outState.putBoolean("ubicacion",true);
+        else
+            outState.putBoolean("ubicacion",true);
+        outState.putString("url",url);
+        if(bitmap!=null)
+            outState.putString("bit",bitmap.toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore last state for checked position.
+            negocio[0].setText(savedInstanceState.getString("denom", ""));
+            negocio[1].setText(savedInstanceState.getString("giro", ""));
+            negocio[2].setText(savedInstanceState.getString("descrip", ""));
+            negocio[3].setText(savedInstanceState.getString("producto", ""));
+
+            domicilio[0].setText(savedInstanceState.getString("calle", ""));
+            domicilio[1].setText(savedInstanceState.getString("noE", ""));
+            domicilio[2].setText(savedInstanceState.getString("noI", ""));
+            domicilio[3].setText(savedInstanceState.getString("colonia", ""));
+            domicilio[4].setText(savedInstanceState.getString("codigo", ""));
+            domicilio[5].setText(savedInstanceState.getString("munic", ""));
+            domicilio[6].setText(savedInstanceState.getString("estado", ""));
+
+            contacto[0].setText(savedInstanceState.getString("emailN", ""));
+            contacto[1].setText(savedInstanceState.getString("telefonoN", ""));
+            contacto[2].setText(savedInstanceState.getString("horario", ""));
+
+            pagina.setText(savedInstanceState.getString("page", ""));
+            faceN.setText(savedInstanceState.getString("faceNe", ""));
+            instaN.setText(savedInstanceState.getString("instaNe", ""));
+
+            sociales.setChecked(savedInstanceState.getBoolean("redes",false));
+            ubicacion.setChecked(savedInstanceState.getBoolean("ubicacion",false));
+            url = savedInstanceState.getString("url", "");
+            if(!savedInstanceState.getString("bit", "null").equals("null"))
+                bitmap = StringToBitMap(savedInstanceState.getString("bit", "null"));
+            if(bitmap != null)
+                image.setImageBitmap(bitmap);
+        }
+    }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
         }
     }
 
@@ -513,6 +638,8 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 map.put("cp",codigo);
                 map.put("municipio",munic);
                 map.put("estado",estado);
+                if(!url.equals(""))
+                    map.put("url_mapa",url);
                 map.put("email",emailN);
                 map.put("telefono",telefonoN);
                 map.put("web",page);

@@ -324,23 +324,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_municipio" />
 
+    <CheckBox
+        android:id="@+id/chk_ubicacion"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato"
+        android:text="Mostrar mi ubicación\nen Google Maps"
+        android:textAlignment="center"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/btn_ubicacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_estado" />
+
+    <Button
+        android:id="@+id/btn_ubicacion"
+        android:layout_width="142dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/btn_redondeado_white"
+        android:enabled="false"
+        android:text="Ver mi ubicación"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_estado" />
+
     <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="CONTACTO"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
         app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_estado" />
+        app:layout_constraintTop_toBottomOf="@+id/chk_ubicacion" />
 
     <EditText
         android:id="@+id/edt_emailNeg"

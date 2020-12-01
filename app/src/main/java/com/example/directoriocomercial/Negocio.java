@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     String token;
     String accion[] = new String[6];
     String tipo[] = new String[6];
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
         redes.setOnItemClickListener(this);
 
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
         mostrarInfo();
         //Metodo para mostrar los comentarios del negocio
         //listaComentarios();
@@ -115,6 +119,25 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     case MotionEvent.ACTION_DOWN:
                         // Disallow ScrollView to intercept touch events.
                         redes.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+                }
+                return false;
+            }
+        });
+
+        comentarios.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                comentarios.requestDisallowInterceptTouchEvent(true);
+                int action = event.getActionMasked();
+                switch (action) {
+                    case MotionEvent.ACTION_UP:
+                        comentarios.requestDisallowInterceptTouchEvent(false);
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        comentarios.requestDisallowInterceptTouchEvent(true);
                         // Disable touch on transparent view
                         return false;
                 }
@@ -241,6 +264,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
     public void mostrarInfo(){
         //Metodo para mostrar la foto del negocio
+        dialog.setMessage("Cargando información");
+        dialog.show();
         StringRequest request = new StringRequest(Request.Method.GET, Constant.NEGOCIO_INDIVIDUAL+idNegocio, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
@@ -286,84 +311,34 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     }
                     adapterR = new MenuAdapterR(this, menuR);
                     redes.setAdapter(adapterR);
-                }
-                else{
-                    Toast.makeText(this, "No hay",Toast.LENGTH_LONG).show();
-                }
-            }
-            catch (JSONException e){
-                Toast.makeText(this, e.getMessage()+"",Toast.LENGTH_LONG).show();
-            }
-        },error -> {
-            Toast.makeText(this, error.getMessage()+"",Toast.LENGTH_LONG).show();
-        }){
-        };
-        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
-        queue.add(request);
-        /*
-        SQLiteDatabase db2=null;
-        Contacto cont;
-        try{
-            cont=new Contacto(this,"Directorio",null,1);
-            db2 = cont.getReadableDatabase();
-            if (db2!=null) {
-                Cursor cursor = db2.rawQuery("SELECT email,telefono,web,face,insta FROM contactoNegocio WHERE negocio_id="+idNegocio,null);
-                if (cursor.moveToNext()){
-                    menuR.add(new MenuR(R.drawable.correo2, cursor.getString(0)+""));
-                    menuR.add(new MenuR(R.drawable.llamada2, cursor.getString(1)+""));
-                    if(cursor.getString(2).isEmpty())
-                        menuR.add(new MenuR(R.drawable.web2, cursor.getString(2)+""));
-                    if(cursor.getString(3).isEmpty())
-                        menuR.add(new MenuR(R.drawable.face2, cursor.getString(3)+""));
-                    if(cursor.getString(4).isEmpty())
-                        menuR.add(new MenuR(R.drawable.insta2, cursor.getString(4)+""));
-                    adapterR = new MenuAdapterR(this, menuR);
-                    redes.setAdapter(adapterR);
-                    cursor.close();
-                    db2.close();
-                }
-                else{
-                    cursor.close();
-                    db2.close();
-                }
-            }//if
-            else {
-                db2.close();
-            }
-        }//try
-        catch (Exception e) { db2.close();}//catch
-        */
-    }
 
-    //Consulta a la pagina para mostrar comentarios
-    public void listaComentarios(){
-        StringRequest request = new StringRequest(Request.Method.GET, Constant.COMENTARIOS, response -> {
-            try {
-                JSONObject object =  new JSONObject(response);
-                if(object.getBoolean("success")){
-                    JSONArray comentariosA = new JSONArray(String.valueOf(object.getJSONArray("comentarios")));
-                    for (int i = 0; i<comentariosA.length(); i++){
-                        JSONObject post = comentariosA.getJSONObject(i);
-                        menuComent.add(new MenuC(R.drawable.usuario, post.getString("nombre"),post.getString("created_at"),post.getString("contenido")));
+                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("comentarios")));
+                    if(comentario.length() == 0)
+                        existeComentarios.setText("Sin Comentarios");
+                    for (int j = 0; j<comentario.length(); j++){
+                        JSONObject coment = comentario.getJSONObject(j);
+                        menuComent.add(new MenuC(R.drawable.usuario,coment.getString("autor")+"",coment.getString("created_at"),coment.getString("contenido")));
                     }
-                    adapterComent = new MenuAdapterC(this, menuComent);
+                    adapterComent = new MenuAdapterC(this,menuComent);
                     comentarios.setAdapter(adapterComent);
                 }
                 else{
-                    existeComentarios.setText("Sin Comentarios");
+                    Toast.makeText(this, "No hay negocios",Toast.LENGTH_LONG).show();
                 }
+                dialog.dismiss();
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, e.getMessage()+"",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, error.getMessage()+"",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }){
         };
         RequestQueue queue = Volley.newRequestQueue(Negocio.this);
         queue.add(request);
     }
-
 
     //Elaboración de la lista de Comentarios
     public class MenuC {
