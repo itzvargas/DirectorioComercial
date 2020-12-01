@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -62,6 +64,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     String token;
     String accion[] = new String[6];
     String tipo[] = new String[6];
+    int[] eliminarComentarios;
     private ProgressDialog dialog;
 
     @Override
@@ -144,6 +147,30 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 return false;
             }
         });
+
+        comentarios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(idUsuario != 0) {
+                    if (eliminarComentarios[position] != 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Negocio.this);
+                        builder.setMessage("¿Estás seguro de eliminar tu comentario?");
+                        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                destryComentario(eliminarComentarios[position]);
+                            }
+                        });
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        builder.show();
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -179,7 +206,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                         ActivityCompat.requestPermissions(Negocio.this,new String[]
                                 { Manifest.permission.CALL_PHONE,},1000);
                     }else{
-                    };
+                    }
                     startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                 }
                 catch (Exception e){
@@ -224,20 +251,18 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 intent1.putExtra("iframe",accion[position]);
                 startActivity(intent1);
                 break;
-
         }
     }
 
-    public void enviarComentario(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.PUBLICAR_COMENTARIO, response -> {
+    public void destryComentario(int id){
+        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.ELIMINAR_COMENTARIO+id+"/destroy", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    Toast.makeText(this, "Se ha publicado tu comentario.",Toast.LENGTH_LONG).show();
-                    coment.setText("");
-                    menuComent.clear();
-                    comentarios.setAdapter(null);
-                    //listaComentarios();
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
                 }
                 else {
                     Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
@@ -249,11 +274,56 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         },error -> {
             Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
             //Agregar parametros
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("token",idUsuario+"");
+                map.put("token",token);
+                return map;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(Negocio.this);
+        queue.add(request);
+    }
+
+    public void enviarComentario(){
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.PUBLICAR_COMENTARIO+idNegocio+"/negocio", response -> {
+            try {
+                JSONObject object =  new JSONObject(response);
+                if(object.getBoolean("success")){
+                    Toast.makeText(this, "Se ha publicado tu comentario.",Toast.LENGTH_LONG).show();
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
+                }
+                else {
+                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (JSONException e){
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+            }
+        },error -> {
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
+            //Agregar parametros
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("token",token);
                 map.put("contenido",coment.getText().toString());
                 return map;
             }
@@ -315,9 +385,19 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("comentarios")));
                     if(comentario.length() == 0)
                         existeComentarios.setText("Sin Comentarios");
+                    eliminarComentarios = new int[comentario.length()];
                     for (int j = 0; j<comentario.length(); j++){
                         JSONObject coment = comentario.getJSONObject(j);
-                        menuComent.add(new MenuC(R.drawable.usuario,coment.getString("autor")+"",coment.getString("created_at"),coment.getString("contenido")));
+                        if(coment.getInt("user_id") == idUsuario) {
+                            menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                    coment.getString("fecha_creado"), coment.getString("contenido"),"Eliminar"));
+                            eliminarComentarios[j] = coment.getInt("id");
+                        }
+                        else {
+                            menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                    coment.getString("fecha_creado"), coment.getString("contenido"),""));
+                            eliminarComentarios[j] = 0;
+                        }
                     }
                     adapterComent = new MenuAdapterC(this,menuComent);
                     comentarios.setAdapter(adapterComent);
@@ -346,12 +426,14 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         private String nombre;
         private String fecha;
         private String comentario;
+        private String eliminar;
 
-        public MenuC(int foto, String nombre, String fecha, String comentario) {
+        public MenuC(int foto, String nombre, String fecha, String comentario, String eliminar) {
             this.foto = foto;
             this.nombre = nombre;
             this.fecha = fecha;
             this.comentario = comentario;
+            this.eliminar = eliminar;
         }
 
         public String getNombre() {
@@ -366,6 +448,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         public void setFecha(String fecha) { this.fecha = fecha; }
         public String getComentario() { return comentario; }
         public void setComentario(String comentario) { this.comentario = comentario; }
+        public String getEliminar() { return eliminar; }
+        public void setEliminar(String eliminar) { this.eliminar = eliminar; }
     }
 
     //Elaboración de la lista de Redes sociales

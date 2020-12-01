@@ -248,7 +248,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
                     reedireccion();
                 }
                 else {
-                    Toast.makeText(this, "Sin conexión a Internet. Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "El correo ya estoa registrado.",Toast.LENGTH_LONG).show();
                 }
             }
             catch (JSONException e){

@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_usuario"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/tv_nombreComent"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="25dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="10dp"
@@ -68,4 +68,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
+
+    <TextView
+        android:id="@+id/tv_eliminar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/merriweather"
+        android:text="Eliminar"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_coment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

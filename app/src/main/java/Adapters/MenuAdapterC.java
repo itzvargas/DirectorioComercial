@@ -36,6 +36,10 @@ public class MenuAdapterC extends ArrayAdapter<Negocio.MenuC> {
         fecha.setText(datos.get(position).getFecha());
         TextView coment = (TextView) item.findViewById(R.id.tv_coment);
         coment.setText(datos.get(position).getComentario());
+        TextView eliminar = (TextView) item.findViewById(R.id.tv_eliminar);
+        eliminar.setText(datos.get(position).getEliminar());
+        if (datos.get(position).getEliminar().equals(""))
+            eliminar.setVisibility(View.INVISIBLE);
         return item;
     }
 }
