@@ -137,7 +137,7 @@ public class Registrarme extends Fragment implements View.OnClickListener {
                     Picasso.get().load(Constant.FOTO + foto[eventos.getSelectedItemPosition()]).into(img_even);
                     img_even.setVisibility(View.VISIBLE);
                 }
-                registro.setEnabled(true);
+                registro.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -273,7 +273,6 @@ public class Registrarme extends Fragment implements View.OnClickListener {
                     }
                     adNombres = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,nombres);
                     eventos.setAdapter(adNombres);
-                    registro.setVisibility(View.VISIBLE);
                 }
                 else{
                 }

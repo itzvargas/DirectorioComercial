@@ -61,7 +61,6 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/btn_redondeado_verde"
-        android:enabled="false"
         android:fontFamily="@font/merriweather"
         android:text="Registrarme"
         android:textColor="@android:color/white"
