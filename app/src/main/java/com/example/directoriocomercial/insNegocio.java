@@ -10,7 +10,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,9 +21,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +61,6 @@ import clases.Constant;
  */
 public class insNegocio extends Fragment implements CheckBox.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private LocationManager locManager;
-    private Location loc;
     CheckBox sociales, ubicacion;
     //int id_propietario[] = {R.id.edt_nombreUsuario,R.id.edt_telefonoUsuario,R.id.edt_emailUsuario,R.id.edt_fechaNacUsuario,R.id.edt_faceUsuario};
     int id_negocio[] = {R.id.edt_denominacion,R.id.edt_giro,R.id.edt_descripcion,R.id.edt_productos};
@@ -296,7 +298,24 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener, Ac
                 break;
             case R.id.chk_ubicacion:
                 if(ubicacion.isChecked())
-                    verUbic.setEnabled(true);
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+                    } else {
+                        LocationManager mlocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                        Localizacion Local = new Localizacion();
+                        Local.setMainActivity(this);
+                        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        if (!gpsEnabled) {
+                            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(settingsIntent);
+                        }
+                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+                            return;
+                        }
+                        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+                        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+                    }
                 else {
                     url = "";
                     verUbic.setEnabled(false);
@@ -338,22 +357,9 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener, Ac
                 cargarImagen();
                 break;
             case R.id.btn_ubicacion:
-                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                {
-                    return;
-                }
-                locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                url = "<iframe src=\"https://maps.google.com/maps?q="+ loc.getLatitude()+","+ loc.getLongitude()+"&hl=es&z=14&amp;output=embed\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\" aria-hidden=\"false\" tabindex=\"0\"></iframe>";
                 Intent intent1 = new Intent(getContext(), Maps.class);
                 intent1.putExtra("iframe",url+"");
                 startActivity(intent1);
-                //texto += "Latitud " + loc.getLatitude();
-                //texto += "\nLongitud " + loc.getLongitude();
-                //texto += "\nAltitud" + loc.getAltitude();
-                //texto += "\nPrecision " + loc.getAccuracy();
-                //Toast.makeText(getContext(), texto+"",Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -613,5 +619,49 @@ public class insNegocio extends Fragment implements CheckBox.OnClickListener, Ac
             return Base64.encodeToString(array, Base64.DEFAULT);
         }
         return "";
+    }
+
+    public class Localizacion implements LocationListener {
+        insNegocio mainActivity;
+        public insNegocio getMainActivity() {
+            return mainActivity;
+        }
+        public void setMainActivity(insNegocio mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            url = "<iframe src=\"https://maps.google.com/maps?q="+ loc.getLatitude()+
+                    ","+ loc.getLongitude()+ "&hl=es&z=14&amp;output=embed\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\" aria-hidden=\"false\" tabindex=\"0\"></iframe>";
+            verUbic.setEnabled(true);
+        }
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            //mensaje1.setText("GPS Desactivado");
+        }
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            //mensaje1.setText("GPS Activado");
+        }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    break;
+            }
+        }
     }
 }
