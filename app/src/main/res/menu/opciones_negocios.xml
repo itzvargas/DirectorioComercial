@@ -6,4 +6,14 @@
         android:orderInCategory="100"
         android:title="Editar"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/negocio_promocion"
+        android:orderInCategory="100"
+        android:title="Crear promoción"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/negocio_cupon"
+        android:orderInCategory="100"
+        android:title="Crear cupón"
+        app:showAsAction="never" />
 </menu>

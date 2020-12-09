@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Maps"></activity>
+        <activity android:name=".CrearPromocion"></activity>
+        <activity android:name=".Maps" />
         <activity android:name=".EditarNegocio" />
         <activity
             android:name=".Recuperacion"

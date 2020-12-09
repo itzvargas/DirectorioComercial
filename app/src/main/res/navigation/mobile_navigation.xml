@@ -50,4 +50,9 @@
         android:name="com.example.directoriocomercial.misEventos"
         android:label="Mis Eventos"
         tools:layout="@layout/fragment_mis_eventos" />
+    <fragment
+        android:id="@+id/perfil"
+        android:name="com.example.directoriocomercial.Perfil"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil" />
 </navigation>

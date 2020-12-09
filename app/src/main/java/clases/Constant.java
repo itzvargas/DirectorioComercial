@@ -12,6 +12,10 @@ public class Constant {
     public static final String USERS_LOGAOUT = API + "/logout";
     public static final String REGISTRAR = API + "/registro";
 
+    //Usuarios
+    public static final String PERFIL_USER = API + "/users/";
+    public static final String EDITAR_USER = API + "/users/";
+
     //Negocios
     public static final String INSCRIBIR = API + "/negocios/create";
     public static final String NEGOCIO = API + "/directorio";
@@ -40,4 +44,7 @@ public class Constant {
 
     //Imagenes
     public static final String FOTO = URL + "directorio-ca/storage/app/public/";
+
+    //Contactanos
+    public static final String CONTACTANOS_DIRECTORIO = API + "/datosContacto";
 }

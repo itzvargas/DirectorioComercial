@@ -91,10 +91,22 @@ public class Cerrar extends Fragment {
                 }
             }
             catch (JSONException e){
-                Toast.makeText(getContext(), "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor editor = userPref.edit();
+                editor.clear();
+                editor.apply();
+                editor.commit();
+                Intent intent = new Intent(getContext(), Login.class);
+                startActivity(intent);
+                ((MainActivity)getContext()).finish();
             }
         },error -> {
-            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            SharedPreferences.Editor editor = userPref.edit();
+            editor.clear();
+            editor.apply();
+            editor.commit();
+            Intent intent = new Intent(getContext(), Login.class);
+            startActivity(intent);
+            ((MainActivity)getContext()).finish();
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

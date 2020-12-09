@@ -25,6 +25,10 @@
             android:icon="@drawable/calendario"
             android:title="Mis eventos" />
         <item
+            android:id="@+id/perfil"
+            android:icon="@drawable/perfil"
+            android:title="Perfil" />
+        <item
             android:id="@+id/cerrar"
             android:icon="@drawable/cerrar"
             android:title="Cerrar sesión" />
