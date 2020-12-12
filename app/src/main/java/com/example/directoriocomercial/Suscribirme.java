@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -187,6 +188,10 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         }
         if(em.isEmpty()){
             email.setError("Email requerido");
+            return false;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(em).matches()){
+            email.setError("Email invalido");
             return false;
         }
         if(passw.isEmpty()){

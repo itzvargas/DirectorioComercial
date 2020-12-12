@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -103,6 +104,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             usuario.setError("Email requerido");
             return false;
         }
+        if(!Patterns.EMAIL_ADDRESS.matcher(user).matches()){
+            usuario.setError("Email invalido");
+            return false;
+        }
         if(pass.isEmpty()){
             contra.setError("Contraseña requerida");
             return false;
@@ -143,7 +148,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     public void registrarBDLOGIN(){
         Intent intent;
-        Toast.makeText(this, "Bienvenido " + nombre,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Bienvenido " + nombre,Toast.LENGTH_SHORT).show();
         intent = new Intent(Login.this, MainActivity.class);
         startActivity(intent);
         finish();

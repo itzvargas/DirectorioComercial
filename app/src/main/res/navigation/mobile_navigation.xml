@@ -55,4 +55,9 @@
         android:name="com.example.directoriocomercial.Perfil"
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
+    <fragment
+        android:id="@+id/cuponera"
+        android:name="com.example.directoriocomercial.Cuponera"
+        android:label="Cuponera"
+        tools:layout="@layout/fragment_cuponera" />
 </navigation>

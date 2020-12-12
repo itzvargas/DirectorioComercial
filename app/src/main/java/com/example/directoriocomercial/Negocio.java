@@ -13,8 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -44,7 +42,6 @@ import java.util.Map;
 
 import Adapters.MenuAdapterC;
 import Adapters.MenuAdapterR;
-import bd.Contacto;
 import clases.Constant;
 
 public class Negocio extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{

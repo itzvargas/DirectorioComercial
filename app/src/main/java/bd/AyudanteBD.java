@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AyudanteBD extends SQLiteOpenHelper {
 
     //Sentencia para crear la tabla de Usuarios
-    String creacionUsuarios="CREATE TABLE usuarios (id BIGINTEGER(20) primary key, actividad TEXT)";
+    String creacionUsuarios="CREATE TABLE usuarios (email TEXT primary key, pass TEXT)";
 
     public AyudanteBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

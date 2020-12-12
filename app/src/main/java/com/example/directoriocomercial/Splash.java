@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,11 +14,8 @@ import android.os.Handler;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -27,23 +23,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import bd.AyudanteBD;
-import bd.Contacto;
-import bd.Negocio;
-import bd.Direccion;
 import clases.Constant;
 
 public class Splash extends AppCompatActivity {
 
-    Negocio neg;
-    Direccion direc;
-    Contacto contact;
-    SQLiteDatabase db2=null;
-    SQLiteDatabase db3=null;
-    SQLiteDatabase db4=null;
+    SQLiteDatabase db=null;
+    AyudanteBD sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +37,6 @@ public class Splash extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        neg =new Negocio(this,"Directorio",null,1);
-        direc =new Direccion(this,"Directorio",null,1);
-        contact =new Contacto(this,"Directorio",null,1);
         //actualizacion();
         boolean verif = verificacion();
         if(verif == true) {
@@ -83,12 +66,10 @@ public class Splash extends AppCompatActivity {
         return userPref.getBoolean("isLoggedIn",false);
     }
 
-    public void actualizacion(){
+    /*public void actualizacion(){
         try{
             db2 = neg.getReadableDatabase();
-            db3 = direc.getReadableDatabase();
-            db4 = contact.getReadableDatabase();
-            if (db2!=null || db3!=null || db4!=null) {
+            if (db2!=null) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -96,31 +77,18 @@ public class Splash extends AppCompatActivity {
                     // Si hay conexión a Internet en este momento
                     neg.onUpgrade(db2,1,1);
                     db2.close();
-                    direc.onUpgrade(db3,1,1);
-                    db3.close();
-                    contact.onUpgrade(db4,1,1);
-                    db4.close();
-                    actulizarNegocio();
-                    actulizarDireccion();
-                    actulizarContacto();
                 } else {
                     db2.close();
-                    db3.close();
-                    db4.close();
                     // No hay conexión a Internet en este momento
                     Toast.makeText(this, "Sin conexión a Internet",Toast.LENGTH_LONG).show();
                 }
             }//if
             else {
                 db2.close();
-                db3.close();
-                db4.close();
             }
         }//try
         catch (Exception e) {
             db2.close();
-            db3.close();
-            db4.close();
             Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }//catch
     }
@@ -205,6 +173,6 @@ public class Splash extends AppCompatActivity {
         };
         RequestQueue queue = Volley.newRequestQueue(Splash.this);
         queue.add(request);
-    }
+    }*/
 
 }
