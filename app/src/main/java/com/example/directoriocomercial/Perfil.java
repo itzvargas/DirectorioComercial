@@ -220,6 +220,7 @@ public class Perfil extends Fragment implements View.OnClickListener {
                     face.setEnabled(false);
                     editarP.setVisibility(View.INVISIBLE);
                     editar.setChecked(false);
+                    Toast.makeText(getContext(), "se ha modificado con éxito",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getContext(), "Intentelo más tarde",Toast.LENGTH_LONG).show();

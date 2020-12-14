@@ -33,14 +33,13 @@ public class Constant {
     //Eventos
     public static final String EVENTOS = API + "/eventos";
     public static final String REGISTRAR_EVENTO = API + "/registrate/";
-    public static final String MOSTRAR_MIS_EVENTO = API + "/usuarios/";
+    public static final String MOSTRAR_MIS_EVENTO = API + "/users/";
 
     //Ayudanos
-    public static final String AYUDANOS_LOGIN = API + "/opiniones";
-    public static final String AYUDANOS_SIN_LOGIN = API + "/opiniones";
+    public static final String AYUDANOS_A_MEJORAR = API + "/buzonAyuda";
 
     //Mis negocios
-    public static final String MIS_NEGOCIOS = API + "/usuarios/";
+    public static final String MIS_NEGOCIOS = API + "/users/";
 
     //Imagenes
     public static final String FOTO = URL + "directorio-ca/storage/app/public/";

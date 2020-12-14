@@ -43,18 +43,18 @@ public class CrearPromocion extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.negocio_promocion:
+            /*case R.id.negocio_promocion:
                 intent = new Intent(CrearPromocion.this, CrearPromocion.class);
                 intent.putExtra("ID_N",idNegocio);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.negocio_cupon:
-                /*intent = new Intent(CrearPromocion.this, CrearCupon.class);
+                intent = new Intent(CrearPromocion.this, CrearCupon.class);
                 intent.putExtra("ID_N",idNegocio);
                 startActivity(intent);
-                finish();*/
-                break;
+                finish();
+                break;*/
         }
         return true;
     }

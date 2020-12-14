@@ -45,6 +45,7 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
                 intent = new Intent(Inicio_invitado.this, Suscribirme.class);
                 intent.putExtras(bolsa);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.menu_contactar:
                 intent = new Intent(Inicio_invitado.this, Contactanos2.class);
@@ -53,6 +54,7 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
             case R.id.menu_ayudanos:
                 intent = new Intent(Inicio_invitado.this, Ayudanos2.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.menu_ayuda:
                 intent = new Intent(Inicio_invitado.this, Ayuda2.class);

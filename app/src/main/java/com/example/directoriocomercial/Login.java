@@ -168,8 +168,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     editor.putInt("id",user.getInt("id"));
                     id = user.getInt("id");
                     editor.putString("name",user.getString("name"));
+                    editor.putString("telefono",user.getString("telefono"));
                     editor.putString("email",user.getString("email"));
-                    editor.putString("password",user.getString("password"));
+                    editor.putString("password",pass);
                     nombre = user.getString("name");
                     editor.putBoolean("isLoggedIn",true);
                     editor.apply();

@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_usuario"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:fontFamily="sans-serif-black"
         android:text="Nombre"
@@ -36,20 +36,20 @@
     <TextView
         android:id="@+id/tv_fechaComent"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="25dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:layout_marginEnd="10dp"
         android:fontFamily="@font/lato"
         android:text="Fecha"
         android:textColor="@android:color/black"
-        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMaxTextSize="17sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nombreComent" />
+        app:layout_constraintStart_toEndOf="@+id/rbar_comentarioU"
+        app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 
     <TextView
         android:id="@+id/tv_coment"
@@ -66,8 +66,9 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_fechaComent" />
 
     <TextView
         android:id="@+id/tv_eliminar"
@@ -81,4 +82,18 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_coment" />
+
+    <RatingBar
+        android:id="@+id/rbar_comentarioU"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:numStars="5"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
+        android:stepSize="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 </androidx.constraintlayout.widget.ConstraintLayout>
