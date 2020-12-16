@@ -7,6 +7,10 @@ public class Constant {
     public static final String HOME = URL + "directorio-ca/public";
     public static final String API = HOME + "/api";
 
+    //Descarga Directorio
+    public static final String URL_DESCARGA = API + "/descargarDirectorio";
+    public static final String DESCARGA = URL + "directorio-ca/storage/app/public";
+
     //Login y suscribirse
     public static final String USERS = API + "/login";
     public static final String USERS_LOGAOUT = API + "/logout";

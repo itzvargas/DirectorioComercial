@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +48,11 @@ import clases.Constant;
 public class Negocio extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     ImageView logo;
-    TextView titulo, giro, etiqueta, existeComentarios;
+    TextView titulo, verComent, etiqueta, existeComentarios;
     ListView redes, comentarios;
     EditText coment;
     Button enviar;
+    //RatingBar total, estrellaComent;
     int idNegocio;
     private ArrayList<MenuR> menuR;
     private MenuAdapterR adapterR;
@@ -76,11 +78,13 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
         logo = (ImageView)findViewById(R.id.iv_logo);
         titulo = (TextView)findViewById(R.id.tv_titulo);
-        giro = (TextView)findViewById(R.id.tv_giro_negocio);
+        //total = (RatingBar)findViewById(R.id.rBar_total);
+        verComent = (TextView)findViewById(R.id.txt_verComentarios);
         etiqueta = (TextView)findViewById(R.id.txt_comentario);
         existeComentarios = (TextView)findViewById(R.id.txt_existeComentarios);
         redes = (ListView)findViewById(R.id.lv_redes_sociales);
         comentarios = (ListView)findViewById(R.id.lv_comentarios);
+        //estrellaComent = (RatingBar)findViewById(R.id.rbar_comentario);
         coment = (EditText)findViewById(R.id.edt_comentarioNeg);
         enviar = (Button)findViewById(R.id.btn_enviar_ComenarioNeg);
 
@@ -88,6 +92,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         setTitle(getIntent().getStringExtra("DENOMINACION"));
 
         enviar.setOnClickListener(this);
+        verComent.setOnClickListener(this);
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         if(!userPref.getBoolean("isLoggedIn", false)){
             coment.setVisibility(View.INVISIBLE);
@@ -181,6 +186,11 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
             else {
                 Toast.makeText(this, "Escribe tu comentario.",Toast.LENGTH_LONG).show();
             }
+        }
+        if(v.getId() == R.id.txt_verComentarios){
+            Intent int1 = new Intent(Negocio.this,VerComentarios.class);
+            int1.putExtra("ID",idNegocio);
+            startActivity(int1);
         }
     }
 
@@ -338,12 +348,13 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONObject negocio = object.getJSONObject("negocio");
+                    //total.setRating((float) negocio.getDouble("valoracion_total"));
                     if(!(negocio.getString("image") + "").equals("null"))
                         Picasso.get().load(Constant.FOTO+negocio.getString("image")).into(logo);
                     JSONObject post = negocio.getJSONObject("contacto");
                     JSONObject direcc = negocio.getJSONObject("direccion");
                     if(!(post.getString("horario") + "").equals("null"))
-                        giro.setText(post.getString("horario")+"");
+                        titulo.setText("\n"+post.getString("horario"));
                     int i = 0;
                     menuR.add(new MenuR(R.drawable.correo2, post.getString("email")+""));
                     accion[i] = post.getString("email")+"";
@@ -382,22 +393,23 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("comentarios")));
                     if(comentario.length() == 0)
                         existeComentarios.setText("Sin Comentarios");
-                    eliminarComentarios = new int[comentario.length()];
-                    for (int j = 0; j<comentario.length(); j++){
-                        JSONObject coment = comentario.getJSONObject(j);
-                        if(coment.getInt("user_id") == idUsuario) {
-                            menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                    coment.getString("fecha_creado"), coment.getString("contenido"),"Eliminar"));
-                            eliminarComentarios[j] = coment.getInt("id");
+                    else {
+                        eliminarComentarios = new int[comentario.length()];
+                        for (int j = 0; j < 2; j++) {
+                            JSONObject coment = comentario.getJSONObject(j);
+                            if (coment.getInt("user_id") == idUsuario) {
+                                menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                        coment.getString("fecha_creado"), coment.getString("contenido"), "Eliminar", 0));
+                                eliminarComentarios[j] = coment.getInt("id");
+                            } else {
+                                menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                        coment.getString("fecha_creado"), coment.getString("contenido"), "", 0));
+                                eliminarComentarios[j] = 0;
+                            }
                         }
-                        else {
-                            menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                    coment.getString("fecha_creado"), coment.getString("contenido"),""));
-                            eliminarComentarios[j] = 0;
-                        }
+                        adapterComent = new MenuAdapterC(this, menuComent);
+                        comentarios.setAdapter(adapterComent);
                     }
-                    adapterComent = new MenuAdapterC(this,menuComent);
-                    comentarios.setAdapter(adapterComent);
                 }
                 else{
                     Toast.makeText(this, "No hay negocios",Toast.LENGTH_LONG).show();
@@ -424,13 +436,15 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         private String fecha;
         private String comentario;
         private String eliminar;
+        private int valor;
 
-        public MenuC(int foto, String nombre, String fecha, String comentario, String eliminar) {
+        public MenuC(int foto, String nombre, String fecha, String comentario, String eliminar, int valor) {
             this.foto = foto;
             this.nombre = nombre;
             this.fecha = fecha;
             this.comentario = comentario;
             this.eliminar = eliminar;
+            this.valor = valor;
         }
 
         public String getNombre() {
@@ -447,6 +461,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         public void setComentario(String comentario) { this.comentario = comentario; }
         public String getEliminar() { return eliminar; }
         public void setEliminar(String eliminar) { this.eliminar = eliminar; }
+        public int getValor() { return valor; }
+        public void setValor(int valor) { this.valor = valor; }
     }
 
     //Elaboración de la lista de Redes sociales

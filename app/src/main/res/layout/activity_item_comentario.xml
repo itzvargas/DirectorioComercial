@@ -48,7 +48,7 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rbar_comentarioU"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 
     <TextView
@@ -83,17 +83,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_coment" />
 
-    <RatingBar
-        android:id="@+id/rbar_comentarioU"
-        style="@style/Widget.AppCompat.RatingBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="12dp"
-        android:numStars="5"
-        android:scaleX="0.9"
-        android:scaleY="0.9"
-        android:stepSize="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 </androidx.constraintlayout.widget.ConstraintLayout>
