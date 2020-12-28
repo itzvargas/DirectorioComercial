@@ -207,7 +207,7 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             return false;
         }
         if(!passw.equals(confPass)){
-            pass.setError("La contraseña no coincide");
+            confirP.setError("La contraseña no coincide");
             return false;
         }
         if(telef.isEmpty()){
@@ -280,5 +280,12 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
         };
         RequestQueue queue = Volley.newRequestQueue(Suscribirme.this);
         queue.add(request);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Suscribirme.this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }

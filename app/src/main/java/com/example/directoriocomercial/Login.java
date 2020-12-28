@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import bd.AyudanteBD;
 import clases.Constant;
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +37,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     Button login,invitado;
     TextView recuperar,suscribirte;
     String user,pass;
-    AyudanteBD aBD;
     SQLiteDatabase db=null;
     boolean email,passw;
     int id = 0;
@@ -132,16 +130,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_invitado:
                 intent = new Intent(Login.this, Inicio_invitado.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.txt_recuperar:
                 intent = new Intent(Login.this, Recuperacion.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.txt_suscribirse:
                 intent = new Intent(Login.this, Suscribirme.class);
                 bolsa.putString("RUTA","login");
                 intent.putExtras(bolsa);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

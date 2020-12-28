@@ -44,7 +44,7 @@ import clases.InputStreamVolleyRequest;
 public class Inicio_invitado extends AppCompatActivity  implements View.OnClickListener {
 
     Button direc, desc;
-    String Url;
+    String Url = "";
     String WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private final static int REQUEST_CODE = 1010;
     private final static int REQUEST_PERMISSION_SETTING = 1211;
@@ -138,10 +138,10 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
 
             }
             catch (JSONException e){
-                Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, e.getMessage(),Toast.LENGTH_LONG).show();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
 
         };
@@ -224,14 +224,17 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
                                 } finally {
                                     stream.close();
                                 }
-                                Toast.makeText(Inicio_invitado.this, "Download complete.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Inicio_invitado.this, "Descarga completa.", Toast.LENGTH_LONG).show();
                                 abrirPDF(file);
                             }
+                            else
+                                Toast.makeText(Inicio_invitado.this, "No hay directorio comercial.", Toast.LENGTH_LONG).show();
+
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
                             Log.d("ERROR!!", "NOT DOWNLOADED");
-                            Toast.makeText(Inicio_invitado.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
+                            //Toast.makeText(Inicio_invitado.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            //e.printStackTrace();
                         }
                     }
                 } ,new Response.ErrorListener() {
@@ -239,8 +242,8 @@ public class Inicio_invitado extends AppCompatActivity  implements View.OnClickL
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO handle the error
-                error.printStackTrace();
-                Toast.makeText(Inicio_invitado.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                //error.printStackTrace();
+                //Toast.makeText(Inicio_invitado.this, error.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
         }, null);

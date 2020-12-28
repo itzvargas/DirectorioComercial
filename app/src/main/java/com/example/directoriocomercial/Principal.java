@@ -48,7 +48,7 @@ import clases.InputStreamVolleyRequest;
  */
 public class Principal extends Fragment implements View.OnClickListener {
 
-    String Url;
+    String Url = "";
     String WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private final static int REQUEST_CODE = 1010;
     private final static int REQUEST_PERMISSION_SETTING = 1211;
@@ -112,10 +112,10 @@ public class Principal extends Fragment implements View.OnClickListener {
 
             }
             catch (JSONException e){
-                Toast.makeText(getContext(), e.getMessage(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), e.getMessage(),Toast.LENGTH_LONG).show();
             }
         },error -> {
-            Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "Intentelo más tarde.",Toast.LENGTH_LONG).show();
         }){
 
         };
@@ -198,13 +198,15 @@ public class Principal extends Fragment implements View.OnClickListener {
                                 } finally {
                                     stream.close();
                                 }
-                                Toast.makeText(getContext(), "Download complete.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Descarga completa.", Toast.LENGTH_LONG).show();
                                 abrirPDF(file);
                             }
+                            else
+                                Toast.makeText(getContext(), "No hay directorio comercial.", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
                             Log.d("ERROR!!", "NOT DOWNLOADED");
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
                     }
@@ -214,7 +216,7 @@ public class Principal extends Fragment implements View.OnClickListener {
             public void onErrorResponse(VolleyError error) {
                 // TODO handle the error
                 error.printStackTrace();
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
         }, null);

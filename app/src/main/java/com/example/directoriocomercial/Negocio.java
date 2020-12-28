@@ -394,21 +394,40 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     if(comentario.length() == 0)
                         existeComentarios.setText("Sin Comentarios");
                     else {
-                        eliminarComentarios = new int[comentario.length()];
-                        for (int j = 0; j < 2; j++) {
-                            JSONObject coment = comentario.getJSONObject(j);
-                            if (coment.getInt("user_id") == idUsuario) {
-                                menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                        coment.getString("fecha_creado"), coment.getString("contenido"), "Eliminar", 0));
-                                eliminarComentarios[j] = coment.getInt("id");
-                            } else {
-                                menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                        coment.getString("fecha_creado"), coment.getString("contenido"), "", 0));
-                                eliminarComentarios[j] = 0;
+                        if(comentario.length() == 1){
+                            eliminarComentarios = new int[comentario.length()];
+                            for (int j = 0; j < 1; j++) {
+                                JSONObject coment = comentario.getJSONObject(j);
+                                if (coment.getInt("user_id") == idUsuario) {
+                                    menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                            coment.getString("fecha_creado"), coment.getString("contenido"), "Eliminar", 0));
+                                    eliminarComentarios[j] = coment.getInt("id");
+                                } else {
+                                    menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                            coment.getString("fecha_creado"), coment.getString("contenido"), "", 0));
+                                    eliminarComentarios[j] = 0;
+                                }
                             }
+                            adapterComent = new MenuAdapterC(this, menuComent);
+                            comentarios.setAdapter(adapterComent);
                         }
-                        adapterComent = new MenuAdapterC(this, menuComent);
-                        comentarios.setAdapter(adapterComent);
+                        else {
+                            eliminarComentarios = new int[comentario.length()];
+                            for (int j = 0; j < 2; j++) {
+                                JSONObject coment = comentario.getJSONObject(j);
+                                if (coment.getInt("user_id") == idUsuario) {
+                                    menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                            coment.getString("fecha_creado"), coment.getString("contenido"), "Eliminar", 0));
+                                    eliminarComentarios[j] = coment.getInt("id");
+                                } else {
+                                    menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
+                                            coment.getString("fecha_creado"), coment.getString("contenido"), "", 0));
+                                    eliminarComentarios[j] = 0;
+                                }
+                            }
+                            adapterComent = new MenuAdapterC(this, menuComent);
+                            comentarios.setAdapter(adapterComent);
+                        }
                     }
                 }
                 else{

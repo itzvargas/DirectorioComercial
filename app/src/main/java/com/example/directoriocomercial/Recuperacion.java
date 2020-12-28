@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -91,5 +92,12 @@ public class Recuperacion extends AppCompatActivity implements View.OnClickListe
         };
         RequestQueue queue = Volley.newRequestQueue(Recuperacion.this);
         queue.add(request);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Recuperacion.this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }
