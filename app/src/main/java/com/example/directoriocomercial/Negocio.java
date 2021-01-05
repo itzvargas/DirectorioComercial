@@ -94,6 +94,7 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
 
         enviar.setOnClickListener(this);
         verComent.setOnClickListener(this);
+        eliminarCo.setOnClickListener(this);
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         if(!userPref.getBoolean("isLoggedIn", false)){
             comentarioNeg.setVisibility(View.INVISIBLE);
@@ -183,17 +184,18 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         if(v.getId() == R.id.btn_enviar_ComenarioNeg){
             String c = comentarioNeg.getText().toString();
             if(!c.isEmpty()) {
-                if(enviar.getText() == "Publicar") {
+                if(enviar.getText().toString().equals("Publicar")) {
                     //Enviar los datos a la bd remota
                     enviarComentario();
                 }
-                if(enviar.getText() == "Editar"){
+                if(enviar.getText().toString().equals("Editar")){
                     //Nueva actividad para editar comentario
                     Intent int1 = new Intent(Negocio.this,EditarComentario.class);
-                    int1.putExtra("ID",idComentario);
+                    int1.putExtra("ID",idNegocio);
+                    int1.putExtra("IDcom",idComentario);
                     int1.putExtra("IDuser",idUsuario);
                     int1.putExtra("Bar",estrellaComent.getRating());
-                    int1.putExtra("Comentario",comentarioNeg.getText());
+                    int1.putExtra("Comentario",comentarioNeg.getText().toString());
                     startActivity(int1);
                     finish();
                 }
@@ -293,7 +295,9 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     }
 
     public void destryComentario(){
-        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.ELIMINAR_COMENTARIO+idComentario+"/destroy", response -> {
+        dialog.setMessage("Eliminando comentario...");
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.OPINIONES+idComentario+"/destroy", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
@@ -303,14 +307,17 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     overridePendingTransition(0, 0);
                 }
                 else {
-                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_SHORT).show();
                 }
+                dialog.dismiss();
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -331,25 +338,30 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
     }
 
     public void enviarComentario(){
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.PUBLICAR_COMENTARIO+idNegocio+"/create", response -> {
+        dialog.setMessage("Publicando comentario...");
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.OPINIONES+idNegocio+"/create", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    Toast.makeText(this, "Se ha publicado tu comentario.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Se ha publicado tu comentario.",Toast.LENGTH_SHORT).show();
                     finish();
                     overridePendingTransition(0, 0);
                     startActivity(getIntent());
                     overridePendingTransition(0, 0);
                 }
                 else {
-                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_SHORT).show();
                 }
+                dialog.dismiss();
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         },error -> {
-            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -380,7 +392,9 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
                     JSONObject negocio = object.getJSONObject("negocio");
-                    total.setRating((float) negocio.getDouble("valoracionPromedio"));
+                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("opiniones")));
+                    if(comentario.length() != 0)
+                        total.setRating((float) negocio.getDouble("valoracionPromedio"));
                     if(!(negocio.getString("image") + "").equals("null"))
                         Picasso.get().load(Constant.FOTO+negocio.getString("image")).into(logo);
                     JSONObject post = negocio.getJSONObject("contacto");
@@ -423,12 +437,13 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                     redes.setAdapter(adapterR);
 
                     //Comentarios
-                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("opiniones")));
+
                     if(comentario.length() == 0)
                         existeComentarios.setText("Sin Comentarios");
                     else {
                         if(comentario.length() == 1){
                             //eliminarComentarios = new int[comentario.length()];
+                            //Comentarios
                             for (int j = 0; j < 1; j++) {
                                 JSONObject coment = comentario.getJSONObject(j);
                                 if (coment.getInt("user_id") == idUsuario) {

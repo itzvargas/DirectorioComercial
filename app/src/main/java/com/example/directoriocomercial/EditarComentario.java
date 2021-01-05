@@ -2,6 +2,7 @@ package com.example.directoriocomercial;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,9 +32,10 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
     RatingBar total;
     EditText coment;
     Button editar;
-    int idNegocio, idUsuario, bar;
+    int idNegocio, idUsuario, bar, idComent;
     String comentario, token;
     private SharedPreferences userPref;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,10 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
 
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         idNegocio = getIntent().getIntExtra("ID",0);
+        idComent = getIntent().getIntExtra("IDcom",0);
         idUsuario = userPref.getInt("id", 0);
         token = userPref.getString("token","");
+
         bar = getIntent().getIntExtra("Bar",0);
         comentario = getIntent().getStringExtra("Comentario");
 
@@ -55,6 +59,8 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
         total.setRating(bar);
         coment.setText(comentario);
         editar.setOnClickListener(this);
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
 
     }
 
@@ -84,7 +90,9 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
     }
 
     public void editarComentario(){
-        StringRequest request = new StringRequest(Request.Method.PUT, Constant.EDITAR_COMENTARIO+idNegocio+"/update", response -> {
+        dialog.setMessage("Editando comentario...");
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.PUT, Constant.OPINIONES+idComent+"/update", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
@@ -94,12 +102,15 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
                 else {
                     Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
                 }
+                dialog.dismiss();
             }
             catch (JSONException e){
                 Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         },error -> {
             Toast.makeText(this, "Intentelo más tarde.",Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

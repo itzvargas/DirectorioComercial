@@ -55,7 +55,7 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         menuComent=new ArrayList<MenuC>();
-        com.setOnItemClickListener(this);
+        //com.setOnItemClickListener(this);
         mostrarInfo();
     }
 
@@ -69,24 +69,24 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
                 if(object.getBoolean("success")){
                     JSONObject negocio = object.getJSONObject("negocio");
 
-                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("valoracionPromedio")));
+                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("opiniones")));
                     if(comentario.length() == 0)
                         setTitle("Sin Comentarios");
                     eliminarComentarios = new int[comentario.length()];
                     for (int j = 0; j<comentario.length(); j++){
                         JSONObject coment = comentario.getJSONObject(j);
-                        if(coment.getInt("user_id") == idUsuario) {
+                        /*if(coment.getInt("user_id") == idUsuario) {
                             menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
                                     coment.getString("fecha_creado"), coment.getString("contenido"),"Eliminar",
                                     coment.getInt("valoracion")));
                             eliminarComentarios[j] = coment.getInt("id");
                         }
-                        else {
+                        else {*/
                             menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
                                     coment.getString("fecha_creado"), coment.getString("contenido"),"",
                                     coment.getInt("valoracion")));
                             eliminarComentarios[j] = 0;
-                        }
+                        //}
                     }
                     adapterComent = new MenuAdapterCTotal(this,menuComent);
                     com.setAdapter(adapterComent);
@@ -111,7 +111,7 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(idUsuario != 0) {
+        /*if(idUsuario != 0) {
             if (eliminarComentarios[position] != 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(VerComentarios.this);
                 builder.setMessage("¿Estás seguro de eliminar tu comentario?");
@@ -128,10 +128,10 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
                 });
                 builder.show();
             }
-        }
+        }*/
     }
     public void destryComentario(int id){
-        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.ELIMINAR_COMENTARIO+id+"/destroy", response -> {
+        StringRequest request = new StringRequest(Request.Method.DELETE, Constant.OPINIONES+id+"/destroy", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){

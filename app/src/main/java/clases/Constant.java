@@ -3,7 +3,7 @@ package clases;
 public class Constant {
     //Raíz
     //Itz 17 Koce 12
-    public static final String URL = "http://192.168.0.17";
+    public static final String URL = "http://192.168.0.17/";
     public static final String HOME = URL + "directorio-ca/public";
     public static final String API = HOME + "/api";
 
@@ -28,9 +28,7 @@ public class Constant {
 
     //Comentarios
     public static final String COMENTARIOS = API + "/comentarios";
-    public static final String PUBLICAR_COMENTARIO = API + "/opinionNegocios/";
-    public static final String ELIMINAR_COMENTARIO = API + "/opinionNegocios/";
-    public static final String EDITAR_COMENTARIO = API + "/opinionNegocios/";
+    public static final String OPINIONES = API + "/opinionNegocios/";
 
     //Actualizar tablas
     public static final String ACTUALIZAR_NEGOCIO = API + "/negocios";
