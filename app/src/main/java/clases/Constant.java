@@ -51,4 +51,7 @@ public class Constant {
 
     //Contactanos
     public static final String CONTACTANOS_DIRECTORIO = API + "/datosContacto";
+
+    //Promociones
+    public static final String CREAR_PROMO = API + "/negocios/create";
 }

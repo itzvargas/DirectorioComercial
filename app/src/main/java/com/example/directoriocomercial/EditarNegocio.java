@@ -291,18 +291,18 @@ public class EditarNegocio extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 finish();
                 break;
-            /*case R.id.negocio_promocion:
+            case R.id.negocio_promocion:
                 intent = new Intent(EditarNegocio.this, CrearPromocion.class);
                 intent.putExtra("ID_N",idNegocio);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.negocio_cupon:
-                /*intent = new Intent(EditarNegocio.this, CrearCupon.class);
+                intent = new Intent(EditarNegocio.this, CrearCupon.class);
                 intent.putExtra("ID_N",idNegocio);
                 startActivity(intent);
                 finish();
-                break; */
+                break;
         }
         return true;
     }
