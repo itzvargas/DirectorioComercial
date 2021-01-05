@@ -25,10 +25,9 @@
     <TextView
         android:id="@+id/tv_titulo"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="66dp"
         android:layout_marginTop="3dp"
         android:fontFamily="sans-serif-black"
-        android:text=""
         android:textAlignment="center"
         android:textColor="@android:color/black"
         app:autoSizeMaxTextSize="35sp"
@@ -38,6 +37,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RatingBar
+        android:id="@+id/rBar_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="1.0"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_titulo" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -74,7 +86,9 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="@+id/guideline2" >
+
+    </ListView>
 
     <ListView
         android:id="@+id/lv_comentarios"
@@ -104,20 +118,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="sans-serif-black"
-        android:text="Deja tu comentario"
+        android:text="Tu opinión"
         android:textColor="@android:color/black"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
+    <RatingBar
+        android:id="@+id/rbar_comentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:numStars="5"
+        android:stepSize="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_comentario" />
+
+    <TextView
+        android:id="@+id/txt_eliminarC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/merriweather"
+        android:text="Eliminar"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edt_comentarioNeg"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <EditText
         android:id="@+id/edt_comentarioNeg"
         android:layout_width="0dp"
-        android:layout_height="130dp"
+        android:layout_height="150dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/input2"
         android:ems="10"
@@ -129,7 +168,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_comentario" />
+        app:layout_constraintTop_toBottomOf="@+id/rbar_comentario" />
 
     <Button
         android:id="@+id/btn_enviar_ComenarioNeg"
@@ -152,7 +191,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="sans-serif-black"
         android:text="Comentarios"
         android:textColor="@android:color/black"

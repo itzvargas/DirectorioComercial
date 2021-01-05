@@ -25,9 +25,12 @@ public class Constant {
     public static final String NEGOCIO = API + "/directorio";
     public static final String NEGOCIO_INDIVIDUAL = API + "/negocios/";
     public static final String EDITAR_NEGOCIO = API + "/negocios/";
+
+    //Comentarios
     public static final String COMENTARIOS = API + "/comentarios";
-    public static final String PUBLICAR_COMENTARIO = API + "/comentarios/";
-    public static final String ELIMINAR_COMENTARIO = API + "/comentarios/";
+    public static final String PUBLICAR_COMENTARIO = API + "/opinionNegocios/";
+    public static final String ELIMINAR_COMENTARIO = API + "/opinionNegocios/";
+    public static final String EDITAR_COMENTARIO = API + "/opinionNegocios/";
 
     //Actualizar tablas
     public static final String ACTUALIZAR_NEGOCIO = API + "/negocios";

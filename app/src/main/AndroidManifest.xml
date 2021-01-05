@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CrearCupon"></activity>
+        <activity android:name=".EditarComentario"></activity>
+        <activity android:name=".CrearCupon" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

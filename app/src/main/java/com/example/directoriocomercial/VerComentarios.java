@@ -69,7 +69,7 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
                 if(object.getBoolean("success")){
                     JSONObject negocio = object.getJSONObject("negocio");
 
-                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("comentarios")));
+                    JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("valoracionPromedio")));
                     if(comentario.length() == 0)
                         setTitle("Sin Comentarios");
                     eliminarComentarios = new int[comentario.length()];
@@ -77,12 +77,14 @@ public class VerComentarios extends AppCompatActivity implements AdapterView.OnI
                         JSONObject coment = comentario.getJSONObject(j);
                         if(coment.getInt("user_id") == idUsuario) {
                             menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                    coment.getString("fecha_creado"), coment.getString("contenido"),"Eliminar",0));
+                                    coment.getString("fecha_creado"), coment.getString("contenido"),"Eliminar",
+                                    coment.getInt("valoracion")));
                             eliminarComentarios[j] = coment.getInt("id");
                         }
                         else {
                             menuComent.add(new MenuC(R.drawable.usuario, coment.getString("autor") + "",
-                                    coment.getString("fecha_creado"), coment.getString("contenido"),"",0));
+                                    coment.getString("fecha_creado"), coment.getString("contenido"),"",
+                                    coment.getInt("valoracion")));
                             eliminarComentarios[j] = 0;
                         }
                     }

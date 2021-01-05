@@ -36,7 +36,7 @@
     <TextView
         android:id="@+id/tv_fechaComent"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="10dp"
@@ -48,27 +48,24 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rbar_comentarioU"
         app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 
     <TextView
         android:id="@+id/tv_coment"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="10dp"
         android:fontFamily="@font/merriweather"
         android:text="Comentario"
         android:textColor="@android:color/black"
-        app:autoSizeMaxTextSize="20sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_fechaComent" />
+        app:layout_constraintTop_toBottomOf="@+id/rbar_comentarioU" />
 
     <TextView
         android:id="@+id/tv_eliminar"
@@ -77,10 +74,24 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="10dp"
         android:fontFamily="@font/merriweather"
-        android:text="Eliminar"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_coment" />
+
+    <RatingBar
+        android:id="@+id/rbar_comentarioU"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="13dp"
+        android:numStars="5"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:stepSize="1.0"
+        android:transformPivotX="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_usuario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

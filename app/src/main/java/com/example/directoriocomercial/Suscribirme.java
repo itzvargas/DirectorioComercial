@@ -210,6 +210,10 @@ public class Suscribirme extends AppCompatActivity implements View.OnClickListen
             confirP.setError("La contraseña no coincide");
             return false;
         }
+        if (enteradoU.getSelectedItemPosition() == 0){
+            Toast.makeText(this, "Ingresa la opción sobre cómo te enteraste de nosotros.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if(telef.isEmpty()){
             telefono.setError("Teléfono requerido");
             return false;

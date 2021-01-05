@@ -45,8 +45,8 @@ public class MenuAdapterCTotal extends ArrayAdapter<VerComentarios.MenuC> {
         eliminar.setText(datos.get(position).getEliminar());
         if (datos.get(position).getEliminar().equals(""))
             eliminar.setVisibility(View.INVISIBLE);
-        //RatingBar ratingBar = (RatingBar)item.findViewById(R.id.rbar_comentarioU);
-        //ratingBar.setRating((float) datos.get(position).getValor());
+        RatingBar ratingBar = (RatingBar)item.findViewById(R.id.rbar_comentarioU);
+        ratingBar.setRating((float) datos.get(position).getValor());
         return item;
     }
 }
