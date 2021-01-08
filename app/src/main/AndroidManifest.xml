@@ -19,7 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EditarComentario"></activity>
+        <activity android:name=".itemPromocion"></activity>
+        <activity android:name=".MisPromociones" />
+        <activity android:name=".EditarComentario" />
         <activity android:name=".CrearCupon" />
 
         <provider

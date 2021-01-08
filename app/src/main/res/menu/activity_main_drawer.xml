@@ -25,6 +25,10 @@
             android:icon="@drawable/calendario"
             android:title="Mis eventos" />
         <item
+            android:id="@+id/cuponera"
+            android:icon="@drawable/cupon"
+            android:title="Cuponera" />
+        <item
             android:id="@+id/perfil"
             android:icon="@drawable/perfil"
             android:title="Perfil" />

@@ -2,6 +2,7 @@ package com.example.directoriocomercial;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,17 +39,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import clases.Constant;
+import clases.DatePickerFragment;
 
 public class CrearPromocion extends AppCompatActivity implements View.OnClickListener {
 
-    ImageView banner;
+    ImageView bannerr;
     TextView seleccionar;
     EditText titulo, descripcion, fecha;
     Button crear;
     private SharedPreferences userPref;
     private ProgressDialog dialog;
     int idNegocio;
-    Bitmap bitmap;
+    Bitmap bitmap = null;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,9 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
         setTitle("Crear promoción");
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         idNegocio = getIntent().getIntExtra("ID_N",0);
+        token = userPref.getString("token","");
 
-        banner = (ImageView)findViewById(R.id.img_banner);
+        bannerr = (ImageView)findViewById(R.id.img_banner);
         seleccionar = (TextView)findViewById(R.id.txt_seleccionarBanner);
         titulo = (EditText)findViewById(R.id.edt_tituloPromo);
         descripcion = (EditText)findViewById(R.id.edt_descripcionPromo);
@@ -66,6 +71,10 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
 
         seleccionar.setOnClickListener(this);
         crear.setOnClickListener(this);
+        fecha.setOnClickListener(this);
+
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
 
         titulo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,20 +106,6 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        fecha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (fecha.getText().toString().isEmpty()){
-                    fecha.setError(null);
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
     }
 
     @Override
@@ -151,14 +146,37 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.txt_seleccionarBanner){
-            cargarImagen();
+        switch (v.getId()){
+            case R.id.txt_seleccionarBanner:
+                cargarImagen();
+                break;
+            case R.id.btn_crearPromo:
+                if(validate()){
+                    //Crear promocion
+                    crearPromo();
+                }
+                break;
+            case R.id.edt_fechaVigPromo:
+                showDatePickerDialog();
+                break;
         }
-        if(v.getId() == R.id.btn_crearPromo){
-            if(validate()){
-                //Crear promocion
+    }
+
+    private void showDatePickerDialog() {
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // +1 because January is zero
+                final String selectedDate = year + "-" + twoDigits(month+1) + "-" + twoDigits(day);
+                fecha.setText(selectedDate);
             }
-        }
+        });
+
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    private String twoDigits(int n) {
+        return (n<=9) ? ("0"+n) : String.valueOf(n);
     }
 
     public void cargarImagen(){
@@ -174,21 +192,11 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
             Uri path = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),path);
-                banner.setImageBitmap(bitmap);
+                bannerr.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private String bitmapToString(Bitmap bitmap) {
-        if(bitmap!=null){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-            byte[] array = byteArrayOutputStream.toByteArray();
-            return Base64.encodeToString(array, Base64.DEFAULT);
-        }
-        return "";
     }
 
     public boolean validate(){
@@ -200,17 +208,13 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
             descripcion.setError("Descripción requerida");
             return false;
         }
-        if(fecha.getText().toString().isEmpty()){
-            fecha.setError("Fecha requerida");
-            return false;
-        }
         return true;
     }
 
     public void crearPromo(){
         dialog.setMessage("Creando promoción...");
         dialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.CREAR_PROMO, response -> {
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.CREAR_PROMO+idNegocio+"/create", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
@@ -221,29 +225,47 @@ public class CrearPromocion extends AppCompatActivity implements View.OnClickLis
                     overridePendingTransition(0, 0);
                 }
                 else {
-                    Toast.makeText(this, "Hubo un error, revisa tu información e intenta de nuevo.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Hubo un error, revisa tu información e intenta de nuevo.",Toast.LENGTH_SHORT).show();
                 }
             }
             catch (JSONException e){
-                Toast.makeText(this, "Sin conexión a Internet.\nIntentelo más tarde.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
         }, error -> {
-            Toast.makeText(this, error.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(this, error.getMessage(),Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
+
             //Agregar parametros
             @Override
             protected Map<String, String> getParams() throws AuthFailureError{
                 HashMap<String, String> map = new HashMap<>();
-                map.put("titulo",titulo.getText().toString());
-                map.put("descripcion",descripcion.getText().toString());
-                map.put("fechaVigencia",fecha.getText().toString());
+                map.put("token",token);
+                map.put("titulo",titulo.getText().toString().trim());
+                map.put("descripcion",descripcion.getText().toString().trim());
+                map.put("fechaVigencia",fecha.getText().toString().trim()+"");
                 map.put("image",bitmapToString(bitmap));
                 return map;
             }
         };
         RequestQueue queue = Volley.newRequestQueue(CrearPromocion.this);
         queue.add(request);
+    }
+
+    private String bitmapToString(Bitmap bitmap) {
+        if(bitmap!=null){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+            byte[] array = byteArrayOutputStream.toByteArray();
+            return Base64.encodeToString(array, Base64.DEFAULT);
+        }
+        return "";
     }
 }
