@@ -45,12 +45,13 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
 
     ImageView banner;
     TextView seleccionar;
-    EditText titulo, descripcion, fecha;
+    EditText codigo, titulo, descripcion, fecha;
     Button crear;
     private SharedPreferences userPref;
     private ProgressDialog dialog;
     int idNegocio;
     Bitmap bitmap = null;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,11 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
         setTitle("Crear cupón");
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         idNegocio = getIntent().getIntExtra("ID_N",0);
+        token = userPref.getString("token","");
 
         banner = (ImageView)findViewById(R.id.img_bannerCupon);
         seleccionar = (TextView)findViewById(R.id.txt_seleccionarBannerCupon);
+        codigo = (EditText)findViewById(R.id.edt_codigoCuponCrear);
         titulo = (EditText)findViewById(R.id.edt_tituloCupon);
         descripcion = (EditText)findViewById(R.id.edt_descripcionCupon);
         fecha = (EditText)findViewById(R.id.edt_fechaVigCupon);
@@ -70,6 +73,24 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
         seleccionar.setOnClickListener(this);
         crear.setOnClickListener(this);
         fecha.setOnClickListener(this);
+
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+
+        codigo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (codigo.getText().toString().isEmpty()){
+                    codigo.setError(null);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         titulo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -147,6 +168,7 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
             case R.id.btn_crearCupon:
                 if(validate()){
                     //Crear promocion
+                    crearCupon();
                 }
                 break;
             case R.id.edt_fechaVigCupon:
@@ -204,6 +226,10 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
     }
 
     public boolean validate(){
+        if(codigo.getText().toString().isEmpty()){
+            codigo.setError("Código requerido");
+            return false;
+        }
         if(titulo.getText().toString().isEmpty()){
             titulo.setError("Título requerido");
             return false;
@@ -219,14 +245,14 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
         return true;
     }
 
-    public void crearPromo(){
+    public void crearCupon(){
         dialog.setMessage("Creando cupón...");
         dialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.CREAR_CUPON, response -> {
+        StringRequest request = new StringRequest(Request.Method.POST, Constant.CREAR_CUPON+idNegocio+"/create", response -> {
             try {
                 JSONObject object =  new JSONObject(response);
                 if(object.getBoolean("success")){
-                    Toast.makeText(this, "Se ha creado la promoción.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Se ha creado el cupón.",Toast.LENGTH_SHORT).show();
                     finish();
                     overridePendingTransition(0, 0);
                     startActivity(getIntent());
@@ -244,10 +270,20 @@ public class CrearCupon extends AppCompatActivity implements View.OnClickListene
             Toast.makeText(this, error.getMessage(),Toast.LENGTH_LONG).show();
             dialog.dismiss();
         }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization","Bearer "+token);
+                return map;
+            }
+
             //Agregar parametros
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
+                map.put("token",token);
+                map.put("codigo",codigo.getText().toString());
                 map.put("titulo",titulo.getText().toString());
                 map.put("descripcion",descripcion.getText().toString());
                 map.put("fechaVigencia",fecha.getText().toString());

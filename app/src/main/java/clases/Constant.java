@@ -54,6 +54,9 @@ public class Constant {
 
     //Cuponera
     public static final String CREAR_PROMO = API + "/promociones/";
-    public static final String CREAR_CUPON = API + "/negocios/create";
+    public static final String CREAR_CUPON = API + "/cupones/";
     public static final String MOSTRAR_PROMOS = API + "/promociones";
+    public static final String MOSTRAR_CUPONES = API + "/cupones";
+    public static final String ELIMINAR_PROMO = API + "/promociones/";
+    public static final String ELIMINAR_CUPON = API + "/cupones/";
 }

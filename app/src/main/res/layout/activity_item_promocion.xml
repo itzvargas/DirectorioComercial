@@ -78,10 +78,10 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_itemCodigoPromo"
-        app:srcCompat="@drawable/benner2" />
+        app:srcCompat="@drawable/bannerpromo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

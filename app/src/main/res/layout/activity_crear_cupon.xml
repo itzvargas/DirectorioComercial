@@ -48,11 +48,34 @@
             app:layout_constraintTop_toBottomOf="@+id/img_bannerCupon" />
 
         <EditText
+            android:id="@+id/edt_codigoCuponCrear"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/input"
+            android:ems="10"
+            android:fontFamily="@font/merriweather"
+            android:hint="Código"
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_seleccionarBannerCupon" />
+
+        <EditText
             android:id="@+id/edt_tituloCupon"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/input"
             android:ems="10"
@@ -66,7 +89,7 @@
             app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_seleccionarBannerCupon" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_codigoCuponCrear" />
 
         <EditText
             android:id="@+id/edt_descripcionCupon"
@@ -118,7 +141,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="50dp"
             android:background="@drawable/btn_redondeado_verde"
             android:fontFamily="sans-serif-black"
@@ -128,5 +151,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_fechaVigCupon" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

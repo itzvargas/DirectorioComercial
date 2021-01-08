@@ -1,9 +1,11 @@
 package com.example.directoriocomercial;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,8 @@ public class Promociones extends Fragment implements AdapterView.OnItemClickList
     ListView lista;
     private ArrayList<MenuAdapterPromociones.MenuPromo> menu;
     private MenuAdapterPromociones adapter;
+    private SwipeRefreshLayout refreshLayout;
+    private ProgressDialog dialog;
 
     public Promociones() {
         // Required empty public constructor
@@ -48,7 +52,18 @@ public class Promociones extends Fragment implements AdapterView.OnItemClickList
         rootview = inflater.inflate(R.layout.fragment_promociones, container, false);
         lista = (ListView)rootview.findViewById(R.id.lv_promociones);
         menu=new ArrayList<MenuAdapterPromociones.MenuPromo>();
+        dialog = new ProgressDialog(getContext());
+        dialog.setCancelable(false);
         mostrarInfo();
+        refreshLayout = rootview.findViewById(R.id.swipePromos);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                lista.setAdapter(null);
+                mostrarInfo();
+            }
+        });
         return rootview;
     }
 
@@ -59,6 +74,8 @@ public class Promociones extends Fragment implements AdapterView.OnItemClickList
 
     public void mostrarInfo(){
         //Metodo para mostrar las promociones
+        dialog.setMessage("Cargando promociones");
+        dialog.show();
         StringRequest request = new StringRequest(Request.Method.GET, Constant.MOSTRAR_PROMOS, response -> {
             try {
                 JSONObject object =  new JSONObject(response);
@@ -85,8 +102,12 @@ public class Promociones extends Fragment implements AdapterView.OnItemClickList
             catch (JSONException e){
                 Toast.makeText(getContext(), e.getMessage(),Toast.LENGTH_LONG).show();
             }
+            dialog.dismiss();
+            refreshLayout.setRefreshing(false);
         },error -> {
             Toast.makeText(getContext(), error.getMessage(),Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+            refreshLayout.setRefreshing(false);
         }){
         };
         RequestQueue queue = Volley.newRequestQueue(getContext());

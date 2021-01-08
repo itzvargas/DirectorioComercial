@@ -36,22 +36,19 @@ public class MenuAdapterPromociones extends ArrayAdapter<MenuAdapterPromociones.
         LayoutInflater inflater = LayoutInflater.from(context);
         View item = inflater.inflate(R.layout.activity_item_promocion, null);
         ImageView foto = (ImageView) item.findViewById(R.id.img_itemBanner);
-        if(!datos.get(position).getFoto().equals("null")) {
+        if(!datos.get(position).getCodigo().equals(""))
+            foto.setImageResource(R.drawable.bannercupon);
+        if(!datos.get(position).getFoto().equals("null"))
             Picasso.get().load(Constant.FOTO + datos.get(position).getFoto()).into(foto);
-            foto.setVisibility(View.VISIBLE);
-        }
-        else {
-            foto.cancelDragAndDrop();
-        }
         TextView titulo = (TextView) item.findViewById(R.id.txt_itemTituloPromo);
         titulo.setText(datos.get(position).getTitulo());
         TextView descripcion = (TextView) item.findViewById(R.id.txt_itemDescPromo);
         descripcion.setText(datos.get(position).getDescripcion());
-        if (!datos.get(position).getFechaV().equals(""))
-            descripcion.append("\nFecha de vigencia:"+datos.get(position).getFechaV());
+        if (!datos.get(position).getFechaV().equals("null") || !datos.get(position).getFechaV().equals(""))
+            descripcion.append("\nFecha de vigencia: "+datos.get(position).getFechaV());
         TextView codigo = (TextView) item.findViewById(R.id.txt_itemCodigoPromo);
         if(!datos.get(position).getCodigo().equals("")) {
-            codigo.setText(datos.get(position).getCodigo());
+            codigo.setText("Código: "+datos.get(position).getCodigo());
             codigo.setVisibility(View.VISIBLE);
         }
         TextView neg = (TextView) item.findViewById(R.id.txt_itemNegocioPromo);
