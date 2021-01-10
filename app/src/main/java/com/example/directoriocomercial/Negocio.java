@@ -89,9 +89,6 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
         eliminarCo = (TextView)findViewById(R.id.txt_eliminarC);
         enviar = (Button)findViewById(R.id.btn_enviar_ComenarioNeg);
 
-        titulo.setText(getIntent().getStringExtra("GIRO"));
-        setTitle(getIntent().getStringExtra("DENOMINACION"));
-
         enviar.setOnClickListener(this);
         verComent.setOnClickListener(this);
         eliminarCo.setOnClickListener(this);
@@ -201,7 +198,10 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 }
             }
             else {
-                Toast.makeText(this, "Escribe tu comentario.",Toast.LENGTH_LONG).show();
+                if(c.isEmpty())
+                    comentarioNeg.setError("Comentario requerido");
+                if(estrellaComent.getRating() == 0.0)
+                    Toast.makeText(this, "Ingresa tu valoración",Toast.LENGTH_LONG).show();
             }
         }
         if(v.getId() == R.id.txt_eliminarC){
@@ -393,6 +393,8 @@ public class Negocio extends AppCompatActivity implements View.OnClickListener, 
                 if(object.getBoolean("success")){
                     JSONObject negocio = object.getJSONObject("negocio");
                     JSONArray comentario = new JSONArray(String.valueOf(negocio.getJSONArray("opiniones")));
+                    titulo.setText(negocio.getString("giro"));
+                    setTitle(negocio.getString("denominacion_soc"));
                     if(comentario.length() != 0)
                         total.setRating((float) negocio.getDouble("valoracionPromedio"));
                     if(!(negocio.getString("image") + "").equals("null"))

@@ -79,14 +79,23 @@ public class EditarComentario extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_editarComentario){
-            if(!coment.getText().toString().isEmpty()) {
+            if(validate()) {
                 //Método para editar comentario
                 editarComentario();
             }
-            else {
-                Toast.makeText(this, "Escribe tu comentario.",Toast.LENGTH_LONG).show();
-            }
         }
+    }
+
+    public boolean validate(){
+        if(coment.getText().toString().isEmpty()) {
+            coment.setError("Comentario requerido");
+            return false;
+        }
+        if(total.getRating() == 0.0){
+            Toast.makeText(this, "Ingresa tu valoración",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     public void editarComentario(){

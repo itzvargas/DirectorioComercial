@@ -44,7 +44,7 @@ public class MenuAdapterPromociones extends ArrayAdapter<MenuAdapterPromociones.
         titulo.setText(datos.get(position).getTitulo());
         TextView descripcion = (TextView) item.findViewById(R.id.txt_itemDescPromo);
         descripcion.setText(datos.get(position).getDescripcion());
-        if (!datos.get(position).getFechaV().equals("null") || !datos.get(position).getFechaV().equals(""))
+        if (!datos.get(position).getFechaV().equals("null"))
             descripcion.append("\nFecha de vigencia: "+datos.get(position).getFechaV());
         TextView codigo = (TextView) item.findViewById(R.id.txt_itemCodigoPromo);
         if(!datos.get(position).getCodigo().equals("")) {

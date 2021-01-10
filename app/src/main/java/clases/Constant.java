@@ -3,7 +3,7 @@ package clases;
 public class Constant {
     //Raíz
     //Itz 15 Koce 12
-    public static final String URL = "http://192.168.0.15/";
+    public static final String URL = "http://192.168.0.16/";
     public static final String HOME = URL + "directorio-ca/public";
     public static final String API = HOME + "/api";
 
@@ -59,4 +59,5 @@ public class Constant {
     public static final String MOSTRAR_CUPONES = API + "/cupones";
     public static final String ELIMINAR_PROMO = API + "/promociones/";
     public static final String ELIMINAR_CUPON = API + "/cupones/";
+    public static final String ADMINISTRAR_CUPON = API + "/cupones/canjear";
 }

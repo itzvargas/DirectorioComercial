@@ -32,7 +32,7 @@
             android:background="@drawable/input"
             android:ems="10"
             android:fontFamily="@font/merriweather"
-            android:hint="Código"
+            android:hint="Código del cupón"
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textColor="@android:color/black"
@@ -67,19 +67,47 @@
             app:layout_constraintTop_toBottomOf="@+id/edt_codigoCupon" />
 
         <Button
+            android:id="@+id/btn_borrarAdministrar"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_redondeado_rojo"
+            android:fontFamily="sans-serif-black"
+            android:text="Borrar"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_correoUsCupon" />
+
+        <Button
             android:id="@+id/btn_enviarCupon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="50dp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/btn_redondeado_verde"
             android:fontFamily="sans-serif-black"
             android:text="Enviar"
             android:textColor="@android:color/white"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_correoUsCupon" />
+
+        <TextView
+            android:id="@+id/txt_mensajeAdministrar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
             android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_correoUsCupon" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_borrarAdministrar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
